@@ -9,5 +9,13 @@
   },
   "browserslist": [
     "defaults"
-  ]
+  ],
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "autoprefixer": "^10.4.22",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1"
+  }
 }
