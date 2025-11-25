@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trade_date: 2025-11-25
+  operation_type: MyString
+  option_type: MyString
+  underlying_asset: MyString
+  option_code: MyString
+  strike_price: 9.99
+  price: 9.99
+  quantity: 1
+  premium: 9.99
+  premium_yield: 9.99
+  notional: 9.99
+  net_premium: 9.99
+  expiration_date: 2025-11-25
+  close_date: 2025-11-25
+
+two:
+  trade_date: 2025-11-25
+  operation_type: MyString
+  option_type: MyString
+  underlying_asset: MyString
+  option_code: MyString
+  strike_price: 9.99
+  price: 9.99
+  quantity: 1
+  premium: 9.99
+  premium_yield: 9.99
+  notional: 9.99
+  net_premium: 9.99
+  expiration_date: 2025-11-25
+  close_date: 2025-11-25
