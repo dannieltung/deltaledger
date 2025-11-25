@@ -1,4 +1,5 @@
 class OptionTrade < ApplicationRecord
+  belongs_to :user
   # ENUMs para tipos fixos
   enum :operation_type, { buy: "buy", sell: "sell" }
   enum :option_type, { call: "call", put: "put" }
