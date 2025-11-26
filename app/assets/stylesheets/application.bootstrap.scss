@@ -1,2 +1,8 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+// Devise styles
+@import 'devise/authentication';
+
+// Pages styles
+@import 'pages/home';

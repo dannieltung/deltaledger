@@ -1,0 +1,193 @@
+// Variáveis (reutilizando as mesmas do auth)
+$primary-color: #667eea;
+$primary-dark: #5568d3;
+$secondary-color: #764ba2;
+$text-dark: #2d3748;
+$text-medium: #4a5568;
+$text-light: #718096;
+$border-color: #e2e8f0;
+$white: #ffffff;
+
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-xxl: 3rem;
+
+$border-radius: 8px;
+$border-radius-lg: 16px;
+
+// Container da home page
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+// Card principal da home
+.home-card {
+  max-width: 600px;
+  width: 100%;
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: $spacing-xxl $spacing-xl;
+  text-align: center;
+}
+
+// Cabeçalho da home
+.home-header {
+  margin-bottom: $spacing-xl;
+
+  .home-logo {
+    font-size: 4rem;
+    color: $primary-color;
+    margin-bottom: $spacing-md;
+    display: block;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0 0 $spacing-md 0;
+    background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    color: $text-light;
+    font-size: 1.125rem;
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+// Features da home
+.home-features {
+  margin: $spacing-xl 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: $spacing-lg;
+
+  .feature-item {
+    padding: $spacing-lg;
+    border-radius: $border-radius;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+    }
+
+    .feature-title {
+      font-size: 0.938rem;
+      font-weight: 600;
+      color: $text-dark;
+      margin: 0;
+    }
+  }
+}
+
+// Botões de ação
+.home-actions {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+  margin-top: $spacing-xl;
+  flex-wrap: wrap;
+
+  .home-btn {
+    padding: 0.875rem $spacing-xl;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-family: inherit;
+    border: none;
+
+    &.primary {
+      background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+      color: $white;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+    }
+
+    &.secondary {
+      background: $white;
+      color: $primary-color;
+      border: 2px solid $primary-color;
+
+      &:hover {
+        background: rgba(102, 126, 234, 0.05);
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 576px) {
+  .home-card {
+    padding: $spacing-xl $spacing-lg;
+  }
+
+  .home-header {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .home-logo {
+      font-size: 3rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .home-features {
+    grid-template-columns: 1fr;
+  }
+
+  .home-actions {
+    flex-direction: column;
+
+    .home-btn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .home-container {
+    padding: 10px;
+  }
+
+  .home-card {
+    padding: $spacing-lg $spacing-md;
+  }
+
+  .home-header h1 {
+    font-size: 1.75rem;
+  }
+}

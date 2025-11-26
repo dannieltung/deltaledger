@@ -1,20 +1,49 @@
 <%- if controller_name != 'sessions' %>
-  <%= link_to "Log in", new_session_path(resource_name) %><br />
+  <div class="auth-link-item">
+    <%= link_to new_user_session_path do %>
+      <i class="bi bi-box-arrow-in-right"></i> Já tem uma conta? <strong>Entre aqui</strong>
+    <% end %>
+  </div>
 <% end %>
+
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <%= link_to "Sign up", new_user_registration_path(resource_name) %><br />
+  <div class="auth-link-item">
+    <%= link_to new_user_registration_path do %>
+      <i class="bi bi-person-plus"></i> Não tem uma conta? <strong>Cadastre-se</strong>
+    <% end %>
+  </div>
 <% end %>
+
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to "Forgot your password?", new_user_password_path(resource_name) %><br />
+  <div class="auth-link-item auth-link-secondary">
+    <%= link_to new_user_password_path do %>
+      <i class="bi bi-key"></i> Esqueceu sua senha?
+    <% end %>
+  </div>
 <% end %>
+
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
+  <div class="auth-link-item auth-link-secondary">
+    <%= link_to new_user_confirmation_path do %>
+      <i class="bi bi-envelope"></i> Não recebeu as instruções de confirmação?
+    <% end %>
+  </div>
 <% end %>
+
 <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
+  <div class="auth-link-item auth-link-secondary">
+    <%= link_to new_user_unlock_path do %>
+      <i class="bi bi-unlock"></i> Não recebeu as instruções de desbloqueio?
+    <% end %>
+  </div>
 <% end %>
+
 <%- if devise_mapping.omniauthable? %>
   <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
+    <div class="auth-link-item">
+      <%= button_to omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "auth-oauth-button" do %>
+        Entrar com <%= OmniAuth::Utils.camelize(provider) %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
