@@ -63,7 +63,7 @@ $border-radius-lg: 16px;
 .trade-form {
   .trade-form-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: $spacing-md;
     margin-bottom: $spacing-md;
   }
@@ -71,6 +71,12 @@ $border-radius-lg: 16px;
   .trade-form-group {
     display: flex;
     flex-direction: column;
+  }
+
+  .trade-form-group-centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .trade-label {
@@ -95,9 +101,11 @@ $border-radius-lg: 16px;
     transition: all 0.3s ease;
     font-family: inherit;
     background: $white;
+    text-align: center;
 
     &::placeholder {
       color: #a0aec0;
+      text-align: center;
     }
 
     &:focus {
