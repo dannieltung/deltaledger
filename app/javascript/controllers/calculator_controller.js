@@ -1,23 +1,40 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input1", "input2", "result"]
+  static targets = ["premium", "strike", "result"]
 
   connect() {
     console.log("Calculator controller connected!");
     this.calculate()
   }
 
-  calculate() {
-    const value1 = parseFloat(this.input1Target.value) || 0
-    const value2 = parseFloat(this.input2Target.value) || 0
+  formatInput(event) {
+    const input = event.target
+    let value = input.value
 
-    if (value2 === 0) {
-      this.resultTarget.textContent = "0.00%"
+    // Substitui todos os pontos por vírgulas
+    value = value.replace(/\./g, ',')
+
+    // Permite apenas uma vírgula
+    const parts = value.split(',')
+    if (parts.length > 2) {
+      value = parts[0] + ',' + parts.slice(1).join('')
+    }
+
+    input.value = value
+  }
+
+  calculate() {
+    const strikeValue = parseFloat(this.strikeTarget.value.replace(',', '.')) || 0
+    const premiumValue = parseFloat(this.premiumTarget.value.replace(',', '.')) || 0
+
+    if (strikeValue === 0) {
+      this.resultTarget.textContent = "0,00%"
       return
     }
 
-    const percentage = (value1 / value2) * 100
-    this.resultTarget.textContent = `${percentage.toFixed(2)}%`
+    const percentage = (premiumValue / strikeValue) * 100
+    const formattedPercentage = percentage.toFixed(2).replace('.', ',')
+    this.resultTarget.textContent = `${formattedPercentage}%`
   }
 }

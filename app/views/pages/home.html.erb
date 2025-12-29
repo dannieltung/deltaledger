@@ -3,47 +3,47 @@
     <div class="calculator-form-container" data-controller="calculator">
       <h3 class="trade-form-title">
         <i class="bi bi-calculator"></i>
-        Calculadora de Percentual
+        Yield do Prêmio
       </h3>
       <div class="trade-form">
         <div class="trade-form-row">
           <div class="trade-form-group">
-            <label class="trade-label">Prêmio</label>
-            <input
-              type="number"
-              class="trade-input"
-              placeholder="0.00"
-              data-calculator-target="input1"
-              data-action="input->calculator#calculate"
-            >
-          </div>
-          <div class="trade-form-group">
             <label class="trade-label">Strike</label>
             <input
-              type="number"
+              type="text"
               class="trade-input"
-              placeholder="0.00"
-              data-calculator-target="input2"
-              data-action="input->calculator#calculate"
-            >
-          </div>
-          <div class="trade-form-group trade-form-group-centered">
-            <label class="trade-label">Percentual</label>
-            <div class="trade-input" data-calculator-target="result" style="background-color: #f5f5f5;">0.00%</div>
+              placeholder="0,00"
+              data-calculator-target="strike"
+              data-action="input->calculator#formatInput input->calculator#calculate"
+              >
+            </div>
+            <div class="trade-form-group">
+              <label class="trade-label">Prêmio</label>
+              <input
+              type="text"
+              class="trade-input"
+              placeholder="0,00"
+              data-calculator-target="premium"
+              data-action="input->calculator#formatInput input->calculator#calculate"
+                >
+              </div>
+              <div class="trade-form-group trade-form-group-centered">
+                <label class="trade-label">Yield</label>
+                <div class="trade-input" data-calculator-target="result" style="background-color: #f5f5f5;">0.00%</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <% if user_signed_in? %>
-      <div class="trade-form-container">
-        <h3 class="trade-form-title">
-          <i class="bi bi-plus-circle"></i>
-          Nova Operação
-        </h3>
-        <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form' } do |f| %>
-          <div class="trade-form-row">
-            <div class="trade-form-group">
-              <%= f.input :trade_date,
+        <% if user_signed_in? %>
+          <div class="trade-form-container">
+            <h3 class="trade-form-title">
+              <i class="bi bi-plus-circle"></i>
+              Nova Operação
+            </h3>
+            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form' } do |f| %>
+              <div class="trade-form-row">
+                <div class="trade-form-group">
+                  <%= f.input :trade_date,
                             as: :string,
                             wrapper: false,
                             required: false,
@@ -54,64 +54,64 @@
                               value: Date.today.strftime('%d/%m/%y'),
                               data: { controller: 'date-input' }
                             } %>
-            </div>
-            <div class="trade-form-group">
-              <%= f.input :operation_type,
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :operation_type,
                             collection: [['Compra', 'buy'], ['Venda', 'sell']],
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input' } %>
-            </div>
-            <div class="trade-form-group">
-              <%= f.input :option_type,
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :option_type,
                             collection: [['Call', 'call'], ['Put', 'put']],
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input' } %>
-            </div>
-          </div>
-          <div class="trade-form-row">
-            <div class="trade-form-group">
-              <%= f.input :underlying_asset,
+                </div>
+              </div>
+              <div class="trade-form-row">
+                <div class="trade-form-group">
+                  <%= f.input :underlying_asset,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input', placeholder: 'Ex: PETR4' } %>
-            </div>
-            <div class="trade-form-group">
-              <%= f.input :option_code,
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :option_code,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input', placeholder: 'Ex: PETRC50' } %>
-            </div>
-            <div class="trade-form-group">
-              <%= f.input :strike_price,
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :strike_price,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input', placeholder: '0.00' } %>
-            </div>
-          </div>
-          <div class="trade-form-row">
-            <div class="trade-form-group">
-              <%= f.input :price,
+                </div>
+              </div>
+              <div class="trade-form-row">
+                <div class="trade-form-group">
+                  <%= f.input :price,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input', placeholder: '0.00' } %>
-            </div>
-            <div class="trade-form-group">
-              <%= f.input :quantity,
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :quantity,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input', placeholder: '100' } %>
-            </div>
-            <div class="trade-form-group">
-              <%= f.input :expiration_date,
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :expiration_date,
                             as: :string,
                             wrapper: false,
                             required: false,
@@ -121,13 +121,13 @@
                               placeholder: 'DD/MM/AA',
                               data: { controller: 'date-input' }
                             } %>
-            </div>
-          </div>
-          <div class="trade-form-actions">
-            <%= f.button :submit, "Registrar Operação", class: "trade-submit-btn" %>
+                </div>
+              </div>
+              <div class="trade-form-actions">
+                <%= f.button :submit, "Registrar Operação", class: "trade-submit-btn" %>
+              </div>
+            <% end %>
           </div>
         <% end %>
       </div>
-    <% end %>
-  </div>
-</div>
+    </div>

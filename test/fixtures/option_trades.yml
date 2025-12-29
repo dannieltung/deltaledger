@@ -1,14 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  user: one
   trade_date: 2025-11-25
-  operation_type: MyString
-  option_type: MyString
-  underlying_asset: MyString
-  option_code: MyString
+  operation_type: buy
+  option_type: call
+  underlying_asset: PETR4
+  option_code: PETRA100
   strike_price: 9.99
   price: 9.99
-  quantity: 1
+  quantity: 100
   premium: 9.99
   premium_yield: 9.99
   notional: 9.99
@@ -17,14 +18,15 @@ one:
   close_date: 2025-11-25
 
 two:
+  user: two
   trade_date: 2025-11-25
-  operation_type: MyString
-  option_type: MyString
-  underlying_asset: MyString
-  option_code: MyString
+  operation_type: sell
+  option_type: put
+  underlying_asset: VALE3
+  option_code: VALEV100
   strike_price: 9.99
   price: 9.99
-  quantity: 1
+  quantity: 200
   premium: 9.99
   premium_yield: 9.99
   notional: 9.99
