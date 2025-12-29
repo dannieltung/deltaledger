@@ -1,6 +1,6 @@
 class OptionTradesController < ApplicationController
   before_action :authenticate_user!
-  before_action :parse_dates, only: [:create]
+  before_action :parse_dates, only: [ :create ]
 
   def create
     @option_trade = current_user.option_trades.build(option_trade_params)
@@ -8,21 +8,22 @@ class OptionTradesController < ApplicationController
     if @option_trade.save
       redirect_to root_path, notice: "Trade criado com sucesso!"
     else
-      redirect_to root_path, alert: "Erro ao criar trade: #{@option_trade.errors.full_messages.join(', ')}"
+      flash.now[:alert] = "Erro ao criar trade: #{@option_trade.errors.full_messages.join(', ')}"
+      render "pages/home", status: :unprocessable_entity
     end
   end
 
   private
 
   def parse_dates
-    date_fields = [:trade_date, :expiration_date, :close_date]
+    date_fields = [ :trade_date, :expiration_date, :close_date ]
 
     date_fields.each do |field|
       if params[:option_trade][field].present?
         begin
           # Converte DD/MM/AA para YYYY-MM-DD
           date_str = params[:option_trade][field]
-          day, month, year = date_str.split('/')
+          day, month, year = date_str.split("/")
 
           if day && month && year
             # Adiciona '20' ao ano se for apenas 2 dígitos

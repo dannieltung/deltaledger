@@ -1,0 +1,42 @@
+pt-BR:
+  activerecord:
+    models:
+      option_trade: "Operação de Opção"
+
+    attributes:
+      option_trade:
+        trade_date: "Data da operação"
+        operation_type: "Tipo de operação"
+        option_type: "Tipo de opção"
+        underlying_asset: "Ativo subjacente"
+        option_code: "Código da opção"
+        strike_price: "Preço de exercício"
+        price: "Preço"
+        quantity: "Quantidade"
+        premium: "Prêmio"
+        premium_yield: "Yield do prêmio"
+        notional: "Nocional"
+        net_premium: "Prêmio líquido"
+        expiration_date: "Data de vencimento"
+        close_date: "Data de fechamento"
+
+    errors:
+      models:
+        option_trade:
+          attributes:
+            operation_type:
+              blank: "Modalidade não pode estar vazia"
+            option_type:
+              blank: "Tipo de opção não pode estar vazio"
+            trade_date:
+              blank: "Data da operação não pode estar vazia"
+            quantity:
+              blank: "Quantidade não pode estar vazia"
+              not_a_number: "Quantidade deve ser um número"
+              greater_than: "Quantidade deve ser maior que %{count}"
+
+  errors:
+    messages:
+      blank: "não pode ficar em branco"
+      not_a_number: "não é um número"
+      greater_than: "deve ser maior que %{count}"

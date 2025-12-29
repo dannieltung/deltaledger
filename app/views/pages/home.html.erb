@@ -58,6 +58,7 @@
                 <div class="trade-form-group">
                   <%= f.input :operation_type,
                             collection: [['Compra', 'buy'], ['Venda', 'sell']],
+                            prompt: 'Selecione',
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
@@ -66,6 +67,7 @@
                 <div class="trade-form-group">
                   <%= f.input :option_type,
                             collection: [['Call', 'call'], ['Put', 'put']],
+                            prompt: 'Selecione',
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
