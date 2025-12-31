@@ -5,10 +5,10 @@ pt-BR:
 
     attributes:
       option_trade:
-        trade_date: "Data da operação"
+        trade_date: "Data da negociação"
         operation_type: "Tipo de operação"
-        option_type: "Tipo de opção"
-        underlying_asset: "Ativo subjacente"
+        option_type: "Modalidade"
+        underlying_asset: "Ativo"
         option_code: "Código da opção"
         strike_price: "Preço de exercício"
         price: "Preço"
@@ -27,9 +27,9 @@ pt-BR:
             operation_type:
               blank: "Modalidade não pode estar vazia"
             option_type:
-              blank: "Tipo de opção não pode estar vazio"
+              blank: "Modalidade não pode estar vazio"
             trade_date:
-              blank: "Data da operação não pode estar vazia"
+              blank: "Data da negociação não pode estar vazia"
             quantity:
               blank: "Quantidade não pode estar vazia"
               not_a_number: "Quantidade deve ser um número"
