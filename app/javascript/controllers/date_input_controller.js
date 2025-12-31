@@ -3,42 +3,59 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="date-input"
 export default class extends Controller {
   connect() {
-    // Adiciona o event listener para bloquear letras
-    this.element.addEventListener('keypress', this.preventLetters.bind(this))
-    this.element.addEventListener('paste', this.handlePaste.bind(this))
+    // Formata o valor inicial se houver
+    this.formatDate()
   }
 
-  preventLetters(event) {
-    // Permite apenas números e o caractere '/'
-    const charCode = event.which || event.keyCode
-    const char = String.fromCharCode(charCode)
-
-    // Permite números (0-9) e barra (/)
-    if (!/[0-9\/]/.test(char)) {
-      event.preventDefault()
-      return false
-    }
-
-    return true
+  input(event) {
+    this.formatDate()
   }
 
-  handlePaste(event) {
-    // Previne colar texto com letras
+  paste(event) {
     event.preventDefault()
     const pastedText = (event.clipboardData || window.clipboardData).getData('text')
 
-    // Remove tudo que não é número ou barra
-    const cleanText = pastedText.replace(/[^0-9\/]/g, '')
+    // Remove tudo que não é número
+    const cleanText = pastedText.replace(/[^0-9]/g, '')
 
     // Insere o texto limpo
     const input = event.target
-    const start = input.selectionStart
-    const end = input.selectionEnd
-    const currentValue = input.value
+    input.value = cleanText
 
-    input.value = currentValue.substring(0, start) + cleanText + currentValue.substring(end)
+    // Formata após colar
+    this.formatDate()
+  }
 
-    // Reposiciona o cursor
-    input.selectionStart = input.selectionEnd = start + cleanText.length
+  formatDate() {
+    const input = this.element
+    let value = input.value
+
+    // Remove tudo que não é número
+    value = value.replace(/[^0-9]/g, '')
+
+    // Limita a 6 dígitos
+    value = value.substring(0, 6)
+
+    // Formata como DD/MM/AA
+    let formatted = ''
+    if (value.length > 0) {
+      // Adiciona os dois primeiros dígitos (dia)
+      formatted = value.substring(0, 2)
+
+      if (value.length >= 3) {
+        // Adiciona barra e os próximos dois dígitos (mês)
+        formatted += '/' + value.substring(2, 4)
+      }
+
+      if (value.length >= 5) {
+        // Adiciona barra e os últimos dois dígitos (ano)
+        formatted += '/' + value.substring(4, 6)
+      }
+    }
+
+    // Atualiza o valor apenas se mudou
+    if (input.value !== formatted) {
+      input.value = formatted
+    }
   }
 }

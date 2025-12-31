@@ -38,7 +38,7 @@
           <div class="trade-form-container">
             <h3 class="trade-form-title">
               <i class="bi bi-plus-circle"></i>
-              Nova Operação
+              Opção
             </h3>
             <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form' } do |f| %>
               <div class="trade-form-row">
@@ -52,13 +52,16 @@
                               class: 'trade-input',
                               placeholder: 'DD/MM/AA',
                               value: Date.today.strftime('%d/%m/%y'),
-                              data: { controller: 'date-input' }
+                              data: {
+                                controller: 'date-input',
+                                action: 'input->date-input#input paste->date-input#paste'
+                              }
                             } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :operation_type,
                             collection: [['Compra', 'buy'], ['Venda', 'sell']],
-                            prompt: 'Selecione',
+                            selected: 'sell',
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
@@ -66,8 +69,8 @@
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :option_type,
-                            collection: [['Call', 'call'], ['Put', 'put']],
-                            prompt: 'Selecione',
+                            collection: [['CALL', 'call'], ['PUT', 'put']],
+                            selected: 'put',
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
@@ -76,41 +79,41 @@
               </div>
               <div class="trade-form-row">
                 <div class="trade-form-group">
-                  <%= f.input :underlying_asset,
+                  <%= f.input :quantity,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: 'Ex: PETR4' } %>
+                            input_html: { class: 'trade-input', placeholder: '100' } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :option_code,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: 'Ex: PETRC50' } %>
+                            input_html: {
+                              class: 'trade-input',
+                              placeholder: 'Ex: PETRC50',
+                              data: {
+                                controller: 'option-code',
+                                action: 'input->option-code#input paste->option-code#paste'
+                              }
+                            } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :strike_price,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: '0.00' } %>
+                            input_html: { class: 'trade-input', placeholder: '0,00' } %>
                 </div>
               </div>
               <div class="trade-form-row">
                 <div class="trade-form-group">
-                  <%= f.input :price,
+                  <%= f.input :premium,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: '0.00' } %>
-                </div>
-                <div class="trade-form-group">
-                  <%= f.input :quantity,
-                            wrapper: false,
-                            required: false,
-                            label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: '100' } %>
+                            input_html: { class: 'trade-input', placeholder: '0,00' } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :expiration_date,
@@ -121,8 +124,18 @@
                             input_html: {
                               class: 'trade-input',
                               placeholder: 'DD/MM/AA',
-                              data: { controller: 'date-input' }
+                              data: {
+                                controller: 'date-input',
+                                action: 'input->date-input#input paste->date-input#paste'
+                              }
                             } %>
+                </div>
+                <div class="trade-form-group">
+                  <%= f.input :underlying_asset,
+                            wrapper: false,
+                            required: false,
+                            label_html: { class: 'trade-label' },
+                            input_html: { class: 'trade-input', placeholder: 'Ex: PETR4' } %>
                 </div>
               </div>
               <div class="trade-form-actions">

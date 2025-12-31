@@ -45,7 +45,6 @@ class OptionTradesController < ApplicationController
       :underlying_asset,
       :option_code,
       :strike_price,
-      :price,
       :quantity,
       :premium,
       :premium_yield,
