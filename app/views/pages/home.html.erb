@@ -101,19 +101,35 @@
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :strike_price,
+                            as: :string,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: '0,00' } %>
+                            input_html: {
+                              class: 'trade-input',
+                              placeholder: '0,00',
+                              data: {
+                                controller: 'currency-input',
+                                action: 'input->currency-input#input paste->currency-input#paste'
+                              }
+                            } %>
                 </div>
               </div>
               <div class="trade-form-row">
                 <div class="trade-form-group">
                   <%= f.input :premium,
+                            as: :string,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: '0,00' } %>
+                            input_html: {
+                              class: 'trade-input',
+                              placeholder: '0,00',
+                              data: {
+                                controller: 'currency-input',
+                                action: 'input->currency-input#input paste->currency-input#paste'
+                              }
+                            } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :expiration_date,

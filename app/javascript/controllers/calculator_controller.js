@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["premium", "strike", "result"]
 
   connect() {
-    console.log("Calculator controller connected!");
+    // console.log("Calculator controller connected!");
     this.calculate()
   }
 

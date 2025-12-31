@@ -1,6 +1,7 @@
 class OptionTradesController < ApplicationController
   before_action :authenticate_user!
   before_action :parse_dates, only: [ :create ]
+  before_action :parse_decimals, only: [ :create ]
 
   def create
     @option_trade = current_user.option_trades.build(option_trade_params)
@@ -33,6 +34,17 @@ class OptionTradesController < ApplicationController
         rescue
           # Se houver erro na conversão, mantém o valor original
         end
+      end
+    end
+  end
+
+  def parse_decimals
+    decimal_fields = [ :strike_price, :premium, :premium_yield, :notional, :net_premium ]
+
+    decimal_fields.each do |field|
+      if params[:option_trade][field].present?
+        # Converte vírgula para ponto para campos decimais
+        params[:option_trade][field] = params[:option_trade][field].to_s.gsub(',', '.')
       end
     end
   end
