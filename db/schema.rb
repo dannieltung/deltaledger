@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_31_212109) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_03_010755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,7 +25,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_31_212109) do
     t.decimal "premium", precision: 10, scale: 2
     t.decimal "premium_yield", precision: 5, scale: 2
     t.decimal "notional", precision: 10, scale: 2
-    t.decimal "net_premium", precision: 10, scale: 2
+    t.decimal "net_premium", precision: 10, scale: 4
     t.date "expiration_date"
     t.date "close_date"
     t.datetime "created_at", null: false
