@@ -187,6 +187,115 @@
               </div>
             <% end %>
           </div>
+          <div class="filter-container" data-controller="sort">
+            <button type="button" class="filter-toggle-btn" data-action="click->sort#toggle">
+              <i class="bi bi-funnel"></i>
+              <span>Filtrar por</span>
+              <i class="bi bi-chevron-down" data-sort-target="chevron"></i>
+              <%
+                active_filters = 0
+                active_filters += 1 if params.dig(:filter, :trade_date_start).present? || params.dig(:filter, :trade_date_end).present?
+                active_filters += 1 if params.dig(:filter, :operation_type).present?
+                active_filters += 1 if params.dig(:filter, :option_type).present?
+                active_filters += 1 if params.dig(:filter, :underlying_asset).present?
+                active_filters += 1 if params.dig(:filter, :expiration_date_start).present? || params.dig(:filter, :expiration_date_end).present?
+              %>
+              <% if active_filters > 0 %>
+                <span class="filter-badge"><%= active_filters %></span>
+              <% end %>
+            </button>
+
+            <div class="filter-content" data-sort-target="content">
+              <%= form_with(url: root_path, method: :get, class: "filter-form", data: { turbo: false }) do |f| %>
+                <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
+                <% params[:sort]&.each do |key, value| %>
+                  <%= hidden_field_tag "sort[#{key}]", value %>
+                <% end %>
+
+                <div class="filter-fields-list">
+                  <div class="filter-field-group">
+                    <label class="filter-group-label">Data</label>
+                    <div class="filter-date-range">
+                      <%= text_field_tag "filter[trade_date_start]",
+                          params.dig(:filter, :trade_date_start),
+                          placeholder: "DD/MM/AA",
+                          class: "filter-input filter-date",
+                          data: {
+                            controller: 'date-input',
+                            action: 'input->date-input#input paste->date-input#paste'
+                          } %>
+                      <span class="filter-separator">até</span>
+                      <%= text_field_tag "filter[trade_date_end]",
+                          params.dig(:filter, :trade_date_end),
+                          placeholder: "DD/MM/AA",
+                          class: "filter-input filter-date",
+                          data: {
+                            controller: 'date-input',
+                            action: 'input->date-input#input paste->date-input#paste'
+                          } %>
+                    </div>
+                  </div>
+
+                  <div class="filter-field-group">
+                    <label class="filter-group-label">Operação</label>
+                    <%= select_tag "filter[operation_type]",
+                        options_for_select([["Todos", ""], ["Compra", "buy"], ["Venda", "sell"]], params.dig(:filter, :operation_type)),
+                        class: "filter-select" %>
+                  </div>
+
+                  <div class="filter-field-group">
+                    <label class="filter-group-label">Tipo</label>
+                    <%= select_tag "filter[option_type]",
+                        options_for_select([["Todos", ""], ["CALL", "call"], ["PUT", "put"]], params.dig(:filter, :option_type)),
+                        class: "filter-select" %>
+                  </div>
+
+                  <div class="filter-field-group">
+                    <label class="filter-group-label">Ativo</label>
+                    <%= text_field_tag "filter[underlying_asset]",
+                        params.dig(:filter, :underlying_asset),
+                        placeholder: "Ex: PETR4",
+                        class: "filter-input",
+                        data: {
+                          controller: 'option-code',
+                          action: 'input->option-code#input paste->option-code#paste'
+                        } %>
+                  </div>
+
+                  <div class="filter-field-group">
+                    <label class="filter-group-label">Vencimento</label>
+                    <div class="filter-date-range">
+                      <%= text_field_tag "filter[expiration_date_start]",
+                          params.dig(:filter, :expiration_date_start),
+                          placeholder: "DD/MM/AA",
+                          class: "filter-input filter-date",
+                          data: {
+                            controller: 'date-input',
+                            action: 'input->date-input#input paste->date-input#paste'
+                          } %>
+                      <span class="filter-separator">até</span>
+                      <%= text_field_tag "filter[expiration_date_end]",
+                          params.dig(:filter, :expiration_date_end),
+                          placeholder: "DD/MM/AA",
+                          class: "filter-input filter-date",
+                          data: {
+                            controller: 'date-input',
+                            action: 'input->date-input#input paste->date-input#paste'
+                          } %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-actions">
+                  <%= f.submit "Aplicar", class: "search-btn" %>
+                  <% if active_filters > 0 %>
+                    <%= link_to "Limpar", root_path(q: params[:q], sort: params[:sort]&.to_unsafe_h), class: "clear-btn" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
           <div class="sort-container" data-controller="sort">
             <button type="button" class="sort-toggle-btn" data-action="click->sort#toggle">
               <i class="bi bi-sort-down"></i>
@@ -199,6 +308,9 @@
             <div class="sort-content" data-sort-target="content">
               <%= form_with(url: root_path, method: :get, class: "sort-form", data: { turbo: false }) do |f| %>
                 <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
+                <% params[:filter]&.each do |key, value| %>
+                  <%= hidden_field_tag "filter[#{key}]", value %>
+                <% end %>
                 <div class="sort-fields-list">
                   <div class="sort-field-item">
                     <label class="sort-label">
@@ -263,7 +375,7 @@
                 <div class="sort-actions">
                   <%= f.submit "Aplicar", class: "search-btn" %>
                   <% if params[:sort].present? %>
-                    <%= link_to "Limpar", root_path(q: params[:q]), class: "clear-btn" %>
+                    <%= link_to "Limpar", root_path(q: params[:q], filter: params[:filter]&.to_unsafe_h), class: "clear-btn" %>
                   <% end %>
                 </div>
               <% end %>

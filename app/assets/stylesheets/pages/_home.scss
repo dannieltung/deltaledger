@@ -251,6 +251,220 @@ $border-radius-lg: 16px;
   }
 }
 
+// Container de Filtros (Minimalista e Colapsável)
+.filter-container {
+  margin-bottom: $spacing-lg;
+}
+
+.filter-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: 0.75rem $spacing-md;
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $text-medium;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  position: relative;
+
+  i:first-child {
+    color: $secondary-color;
+  }
+
+  span {
+    flex: 1;
+    text-align: left;
+  }
+
+  i:last-of-type {
+    color: $text-light;
+    transition: transform 0.3s ease;
+  }
+
+  .filter-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: linear-gradient(135deg, $secondary-color 0%, $primary-color 100%);
+    color: $white;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &:hover {
+    border-color: $secondary-color;
+    box-shadow: 0 2px 8px rgba(118, 75, 162, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.filter-content {
+  margin-top: $spacing-sm;
+  padding: $spacing-md;
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+}
+
+.filter-form {
+  .filter-fields-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+
+  .filter-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  .filter-group-label {
+    font-weight: 600;
+    color: $text-medium;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .filter-date-range {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .filter-separator {
+    color: $text-light;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .filter-input {
+    flex: 1;
+    padding: 0.5rem $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    font-size: 0.875rem;
+    color: $text-dark;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    background: $white;
+
+    &.filter-date {
+      min-width: 100px;
+    }
+
+    &::placeholder {
+      color: #a0aec0;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $secondary-color;
+      box-shadow: 0 0 0 2px rgba(118, 75, 162, 0.1);
+    }
+  }
+
+  .filter-select {
+    width: 100%;
+    padding: 0.5rem 2rem 0.5rem $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    font-size: 0.875rem;
+    color: $text-dark;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    background: $white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+
+    &:hover {
+      border-color: $secondary-color;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $secondary-color;
+      box-shadow: 0 0 0 2px rgba(118, 75, 162, 0.1);
+    }
+  }
+
+  .filter-actions {
+    display: flex;
+    gap: $spacing-sm;
+    justify-content: flex-end;
+    padding-top: $spacing-sm;
+    border-top: 1px solid lighten($border-color, 5%);
+
+    .search-btn {
+      padding: 0.625rem $spacing-lg;
+      background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+      color: $white;
+      border: none;
+      border-radius: $border-radius;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      min-width: auto;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .clear-btn {
+      padding: 0.625rem $spacing-lg;
+      background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+      color: $white;
+      border: none;
+      border-radius: $border-radius;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      min-width: auto;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        color: $white;
+        text-decoration: none;
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
 // Container de Ordenação (Minimalista e Colapsável)
 .sort-container {
   margin-bottom: $spacing-lg;
@@ -613,6 +827,26 @@ $border-radius-lg: 16px;
     .search-btn,
     .clear-btn {
       width: 100%;
+    }
+  }
+
+  .filter-form {
+    .filter-date-range {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .filter-separator {
+      text-align: center;
+    }
+
+    .filter-actions {
+      flex-direction: column;
+
+      .search-btn,
+      .clear-btn {
+        width: 100%;
+      }
     }
   }
 
