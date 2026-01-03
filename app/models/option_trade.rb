@@ -21,6 +21,31 @@ class OptionTrade < ApplicationRecord
     )
   }
 
+  # Scope de ordenação customizada com suporte para múltiplos atributos
+  scope :custom_sort, ->(sort_params) {
+    return order(trade_date: :desc) if sort_params.blank?
+
+    # Atributos permitidos para ordenação
+    allowed_attributes = %w[trade_date option_code expiration_date notional]
+
+    # Array para armazenar as cláusulas de ordenação
+    order_clauses = []
+
+    # Processa cada parâmetro de ordenação
+    sort_params.each do |attr, direction|
+      next unless allowed_attributes.include?(attr.to_s)
+      next unless %w[asc desc].include?(direction.to_s.downcase)
+
+      order_clauses << "#{attr} #{direction.upcase}"
+    end
+
+    # Se não houver cláusulas válidas, usa ordenação padrão
+    return order(trade_date: :desc) if order_clauses.empty?
+
+    # Aplica todas as cláusulas de ordenação
+    order(Arel.sql(order_clauses.join(", ")))
+  }
+
   private
 
   # Calcula o prêmio líquido com taxa de 0.134%

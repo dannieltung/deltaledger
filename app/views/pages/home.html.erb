@@ -187,6 +187,88 @@
               </div>
             <% end %>
           </div>
+          <div class="sort-container" data-controller="sort">
+            <button type="button" class="sort-toggle-btn" data-action="click->sort#toggle">
+              <i class="bi bi-sort-down"></i>
+              <span>Ordenar por</span>
+              <i class="bi bi-chevron-down" data-sort-target="chevron"></i>
+              <% if params[:sort].present? %>
+                <span class="sort-badge"><%= params[:sort].keys.length %></span>
+              <% end %>
+            </button>
+            <div class="sort-content" data-sort-target="content">
+              <%= form_with(url: root_path, method: :get, class: "sort-form", data: { turbo: false }) do |f| %>
+                <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
+                <div class="sort-fields-list">
+                  <div class="sort-field-item">
+                    <label class="sort-label">
+                      <%= check_box_tag "sort[trade_date]",
+                          params.dig(:sort, :trade_date) || "desc",
+                          params.dig(:sort, :trade_date).present?,
+                          class: "sort-checkbox",
+                          data: { action: "change->sort#toggleField" } %>
+                      <span>Data</span>
+                    </label>
+                    <%= select_tag "sort[trade_date]",
+                        options_for_select([["↓ Decrescente", "desc"], ["↑ Crescente", "asc"]], params.dig(:sort, :trade_date) || "desc"),
+                        class: "sort-select",
+                        disabled: params.dig(:sort, :trade_date).blank? %>
+                  </div>
+
+                  <div class="sort-field-item">
+                    <label class="sort-label">
+                      <%= check_box_tag "sort[option_code]",
+                          params.dig(:sort, :option_code) || "asc",
+                          params.dig(:sort, :option_code).present?,
+                          class: "sort-checkbox",
+                          data: { action: "change->sort#toggleField" } %>
+                      <span>Código</span>
+                    </label>
+                    <%= select_tag "sort[option_code]",
+                        options_for_select([["A→Z", "asc"], ["Z→A", "desc"]], params.dig(:sort, :option_code) || "asc"),
+                        class: "sort-select",
+                        disabled: params.dig(:sort, :option_code).blank? %>
+                  </div>
+
+                  <div class="sort-field-item">
+                    <label class="sort-label">
+                      <%= check_box_tag "sort[expiration_date]",
+                          params.dig(:sort, :expiration_date) || "asc",
+                          params.dig(:sort, :expiration_date).present?,
+                          class: "sort-checkbox",
+                          data: { action: "change->sort#toggleField" } %>
+                      <span>Vencimento</span>
+                    </label>
+                    <%= select_tag "sort[expiration_date]",
+                        options_for_select([["↑ Crescente", "asc"], ["↓ Decrescente", "desc"]], params.dig(:sort, :expiration_date) || "asc"),
+                        class: "sort-select",
+                        disabled: params.dig(:sort, :expiration_date).blank? %>
+                  </div>
+
+                  <div class="sort-field-item">
+                    <label class="sort-label">
+                      <%= check_box_tag "sort[notional]",
+                          params.dig(:sort, :notional) || "desc",
+                          params.dig(:sort, :notional).present?,
+                          class: "sort-checkbox",
+                          data: { action: "change->sort#toggleField" } %>
+                      <span>Notional</span>
+                    </label>
+                    <%= select_tag "sort[notional]",
+                        options_for_select([["↓ Decrescente", "desc"], ["↑ Crescente", "asc"]], params.dig(:sort, :notional) || "desc"),
+                        class: "sort-select",
+                        disabled: params.dig(:sort, :notional).blank? %>
+                  </div>
+                </div>
+                <div class="sort-actions">
+                  <%= f.submit "Aplicar", class: "search-btn" %>
+                  <% if params[:sort].present? %>
+                    <%= link_to "Limpar", root_path(q: params[:q]), class: "clear-btn" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
           <div class="trades-table-wrapper">
             <table class="trades-table">
               <thead>
