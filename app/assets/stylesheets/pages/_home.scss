@@ -251,9 +251,17 @@ $border-radius-lg: 16px;
   }
 }
 
+// Wrapper para Filtros e Ordenação (lado a lado)
+.controls-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
 // Container de Filtros (Minimalista e Colapsável)
 .filter-container {
-  margin-bottom: $spacing-lg;
+  // margin-bottom removido pois está no wrapper agora
 }
 
 .filter-toggle-btn {
@@ -467,7 +475,7 @@ $border-radius-lg: 16px;
 
 // Container de Ordenação (Minimalista e Colapsável)
 .sort-container {
-  margin-bottom: $spacing-lg;
+  // margin-bottom removido pois está no wrapper agora
 }
 
 .sort-toggle-btn {
@@ -828,6 +836,10 @@ $border-radius-lg: 16px;
     .clear-btn {
       width: 100%;
     }
+  }
+
+  .controls-wrapper {
+    grid-template-columns: 1fr;
   }
 
   .filter-form {
