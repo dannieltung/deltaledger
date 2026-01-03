@@ -14,6 +14,7 @@
   <td><%= option_trade.quantity %></td>
   <td>R$ <%= number_to_currency(option_trade.strike_price, unit: '', precision: 2) %></td>
   <td>R$ <%= number_to_currency(option_trade.premium, unit: '', precision: 2) %></td>
+  <td class="trade-net-premium">R$ <%= number_to_currency(option_trade.net_premium || 0, unit: '', precision: 2) %></td>
   <td><%= option_trade.expiration_date.strftime('%d/%m/%y') %></td>
   <td class="trade-total">R$ <%= number_to_currency(option_trade.premium * option_trade.quantity, unit: '', precision: 2) %></td>
 </tr>

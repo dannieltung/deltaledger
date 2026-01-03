@@ -8,12 +8,10 @@ one:
   underlying_asset: PETR4
   option_code: PETRA100
   strike_price: 9.99
-  price: 9.99
   quantity: 100
-  premium: 9.99
+  premium: 10.00
   premium_yield: 9.99
   notional: 9.99
-  net_premium: 9.99
   expiration_date: 2025-11-25
   close_date: 2025-11-25
 
@@ -25,11 +23,9 @@ two:
   underlying_asset: VALE3
   option_code: VALEV100
   strike_price: 9.99
-  price: 9.99
   quantity: 200
-  premium: 9.99
+  premium: 10.00
   premium_yield: 9.99
   notional: 9.99
-  net_premium: 9.99
   expiration_date: 2025-11-25
   close_date: 2025-11-25

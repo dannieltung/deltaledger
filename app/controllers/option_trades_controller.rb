@@ -54,7 +54,7 @@ class OptionTradesController < ApplicationController
   end
 
   def parse_decimals
-    decimal_fields = [ :strike_price, :premium, :premium_yield, :notional, :net_premium ]
+    decimal_fields = [ :strike_price, :premium, :premium_yield, :notional ]
 
     decimal_fields.each do |field|
       if params[:option_trade][field].present?
@@ -76,7 +76,6 @@ class OptionTradesController < ApplicationController
       :premium,
       :premium_yield,
       :notional,
-      :net_premium,
       :expiration_date,
       :close_date
     )
