@@ -40,7 +40,8 @@
               <i class="bi bi-plus-circle"></i>
               Operação
             </h3>
-            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form' } do |f| %>
+            <div id="flash_messages"></div>
+            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form' } do |f| %>
               <div class="trade-form-row">
                 <div class="trade-form-group">
                   <%= f.input :trade_date,
@@ -51,10 +52,10 @@
                             input_html: {
                               class: 'trade-input',
                               placeholder: 'DD/MM/AA',
-                              value: Date.today.strftime('%d/%m/%y'),
                               data: {
                                 controller: 'date-input',
-                                action: 'input->date-input#input paste->date-input#paste'
+                                date_input_auto_fill_value: true,
+                                action: 'input->date-input#input paste->date-input#paste blur->date-input#blur'
                               }
                             } %>
                 </div>
@@ -80,10 +81,18 @@
               <div class="trade-form-row">
                 <div class="trade-form-group">
                   <%= f.input :quantity,
+                            as: :string,
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: '100' } %>
+                            input_html: {
+                              class: 'trade-input',
+                              placeholder: '100',
+                              data: {
+                                controller: 'integer-input',
+                                action: 'input->integer-input#input paste->integer-input#paste'
+                              }
+                            } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :option_code,
@@ -151,13 +160,46 @@
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: 'Ex: PETR4' } %>
+                            input_html: { class: 'trade-input', placeholder: 'Ex: PETR4', data: {
+                              controller: 'option-code',
+                              action: 'input->option-code#input paste->option-code#paste'
+                            } } %>
                 </div>
               </div>
               <div class="trade-form-actions">
                 <%= f.button :submit, "Registrar Operação", class: "trade-submit-btn" %>
               </div>
             <% end %>
+          </div>
+        <% end %>
+        <% if user_signed_in? && @option_trades.present? %>
+          <div class="trades-list-container">
+            <h3 class="trade-form-title">
+              <i class="bi bi-list-ul"></i>
+              Minhas Operações
+            </h3>
+            <div class="trades-table-wrapper">
+              <table class="trades-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Código</th>
+                    <th>Tipo</th>
+                    <th>Operação</th>
+                    <th>Qtd</th>
+                    <th>Strike</th>
+                    <th>Prêmio</th>
+                    <th>Vencimento</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="option_trades_tbody">
+                  <% @option_trades.each do |trade| %>
+                    <%= render partial: "option_trades/option_trade_row", locals: { option_trade: trade } %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
         <% end %>
       </div>

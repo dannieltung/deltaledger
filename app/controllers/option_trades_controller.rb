@@ -7,7 +7,10 @@ class OptionTradesController < ApplicationController
     @option_trade = current_user.option_trades.build(option_trade_params)
 
     if @option_trade.save
-      redirect_to root_path, notice: "Trade criado com sucesso!"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to root_path, notice: "Trade criado com sucesso!" }
+      end
     else
       flash.now[:alert] = "Erro ao criar trade: #{@option_trade.errors.full_messages.join(', ')}"
       render "pages/home", status: :unprocessable_entity
@@ -24,15 +27,27 @@ class OptionTradesController < ApplicationController
         begin
           # Converte DD/MM/AA para YYYY-MM-DD
           date_str = params[:option_trade][field]
+
+          # Valida formato DD/MM/AA
+          unless date_str.match?(/^\d{2}\/\d{2}\/\d{2}$/)
+            params[:option_trade][field] = nil
+            next
+          end
+
           day, month, year = date_str.split("/")
 
           if day && month && year
             # Adiciona '20' ao ano se for apenas 2 dígitos
             full_year = year.length == 2 ? "20#{year}" : year
+
+            # Valida se a data é válida
+            date = Date.new(full_year.to_i, month.to_i, day.to_i)
+
             params[:option_trade][field] = "#{full_year}-#{month.rjust(2, '0')}-#{day.rjust(2, '0')}"
           end
-        rescue
-          # Se houver erro na conversão, mantém o valor original
+        rescue ArgumentError, Date::Error
+          # Se a data for inválida, define como nil
+          params[:option_trade][field] = nil
         end
       end
     end

@@ -1,0 +1,137 @@
+<%= turbo_stream.prepend "option_trades_tbody", partial: "option_trades/option_trade_row", locals: { option_trade: @option_trade } %>
+<%= turbo_stream.update "option_trade_form" do %>
+  <%= simple_form_for OptionTrade.new, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form' } do |f| %>
+    <div class="trade-form-row">
+      <div class="trade-form-group">
+        <%= f.input :trade_date,
+                  as: :string,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: {
+                    class: 'trade-input',
+                    placeholder: 'DD/MM/AA',
+                    data: {
+                      controller: 'date-input',
+                      date_input_auto_fill_value: true,
+                      action: 'input->date-input#input paste->date-input#paste blur->date-input#blur'
+                    }
+                  } %>
+      </div>
+      <div class="trade-form-group">
+        <%= f.input :operation_type,
+                  collection: [['Compra', 'buy'], ['Venda', 'sell']],
+                  selected: 'sell',
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: { class: 'trade-input' } %>
+      </div>
+      <div class="trade-form-group">
+        <%= f.input :option_type,
+                  collection: [['CALL', 'call'], ['PUT', 'put']],
+                  selected: 'put',
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: { class: 'trade-input' } %>
+      </div>
+    </div>
+    <div class="trade-form-row">
+      <div class="trade-form-group">
+        <%= f.input :quantity,
+                  as: :string,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: {
+                    class: 'trade-input',
+                    placeholder: '100',
+                    data: {
+                      controller: 'integer-input',
+                      action: 'input->integer-input#input paste->integer-input#paste'
+                    }
+                  } %>
+      </div>
+      <div class="trade-form-group">
+        <%= f.input :option_code,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: {
+                    class: 'trade-input',
+                    placeholder: 'Ex: PETRC50',
+                    data: {
+                      controller: 'option-code',
+                      action: 'input->option-code#input paste->option-code#paste'
+                    }
+                  } %>
+      </div>
+      <div class="trade-form-group">
+        <%= f.input :strike_price,
+                  as: :string,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: {
+                    class: 'trade-input',
+                    placeholder: '0,00',
+                    data: {
+                      controller: 'currency-input',
+                      action: 'input->currency-input#input paste->currency-input#paste'
+                    }
+                  } %>
+      </div>
+    </div>
+    <div class="trade-form-row">
+      <div class="trade-form-group">
+        <%= f.input :premium,
+                  as: :string,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: {
+                    class: 'trade-input',
+                    placeholder: '0,00',
+                    data: {
+                      controller: 'currency-input',
+                      action: 'input->currency-input#input paste->currency-input#paste'
+                    }
+                  } %>
+      </div>
+      <div class="trade-form-group">
+        <%= f.input :expiration_date,
+                  as: :string,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: {
+                    class: 'trade-input',
+                    placeholder: 'DD/MM/AA',
+                    data: {
+                      controller: 'date-input',
+                      action: 'input->date-input#input paste->date-input#paste'
+                    }
+                  } %>
+      </div>
+      <div class="trade-form-group">
+        <%= f.input :underlying_asset,
+                  wrapper: false,
+                  required: false,
+                  label_html: { class: 'trade-label' },
+                  input_html: { class: 'trade-input', placeholder: 'Ex: PETR4', data: {
+                    controller: 'option-code',
+                    action: 'input->option-code#input paste->option-code#paste'
+                  } } %>
+      </div>
+    </div>
+    <div class="trade-form-actions">
+      <%= f.button :submit, "Registrar Operação", class: "trade-submit-btn" %>
+    </div>
+  <% end %>
+<% end %>
+<%= turbo_stream.update "flash_messages" do %>
+  <div class="alert alert-success" data-controller="flash" style="padding: 12px; margin: 12px 0; background: #d4edda; color: #155724; border-radius: 6px;">
+    Trade criado com sucesso!
+  </div>
+<% end %>
