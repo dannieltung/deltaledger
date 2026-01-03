@@ -1,6 +1,6 @@
 <div class="home-container">
   <div class="home-card">
-    <div class="calculator-form-container" style="border: 1px solid red" data-controller="calculator">
+    <div class="calculator-form-container" data-controller="calculator">
       <h3 class="trade-form-title">
         <i class="bi bi-calculator"></i>
         Yield do Prêmio
@@ -172,35 +172,46 @@
             <% end %>
           </div>
         <% end %>
-        <% if user_signed_in? && @option_trades.present? %>
-          <div class="trades-list-container">
-            <h3 class="trade-form-title">
-              <i class="bi bi-list-ul"></i>
-              Minhas Operações
-            </h3>
-            <div class="trades-table-wrapper">
-              <table class="trades-table">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Código</th>
-                    <th>Tipo</th>
-                    <th>Operação</th>
-                    <th>Qtd</th>
-                    <th>Strike</th>
-                    <th>Prêmio</th>
-                    <th>Vencimento</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody id="option_trades_tbody">
+        <div class="trades-list-container">
+          <div class="search-container">
+            <%= form_with(url: root_path, method: :get, class: "search-form", data: { turbo: false }) do |f| %>
+              <div class="search-wrapper">
+                <%= f.text_field :q,
+                    value: params[:q],
+                    placeholder: "Buscar por ativo ou código da opção...",
+                    class: "search-input" %>
+                <%= f.submit "Buscar", class: "search-btn" %>
+                <% if params[:q].present? %>
+                  <%= link_to "Limpar", root_path, class: "clear-btn" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="trades-table-wrapper">
+            <table class="trades-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Operação</th>
+                  <th>Código</th>
+                  <th>Tipo</th>
+                  <th>Qtd</th>
+                  <th>Strike</th>
+                  <th>Prêmio</th>
+                  <th>Total</th>
+                  <th>Vencimento</th>
+                  <th>Notional</th>
+                </tr>
+              </thead>
+              <tbody id="option_trades_tbody">
+                <% if @option_trades.present? %>
                   <% @option_trades.each do |trade| %>
                     <%= render partial: "option_trades/option_trade_row", locals: { option_trade: trade } %>
                   <% end %>
-                </tbody>
-              </table>
-            </div>
+                <% end %>
+              </tbody>
+            </table>
           </div>
-        <% end %>
+        </div>
       </div>
     </div>

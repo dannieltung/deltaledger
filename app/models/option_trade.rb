@@ -10,6 +10,17 @@ class OptionTrade < ApplicationRecord
 
   before_validation :calculate_net_premium
 
+  # Scope de busca por underlying_asset e option_code
+  scope :search, ->(query) {
+    return all if query.blank?
+
+    normalized_query = query.strip.upcase
+    where(
+      "UPPER(underlying_asset) LIKE :query OR UPPER(option_code) LIKE :query",
+      query: "%#{normalized_query}%"
+    )
+  }
+
   private
 
   # Calcula o prêmio líquido com taxa de 0.134%
