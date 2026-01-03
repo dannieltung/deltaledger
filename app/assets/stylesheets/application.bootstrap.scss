@@ -4,8 +4,12 @@
 // Devise styles
 @import 'devise/authentication';
 
+// Components
+@import 'components/navbar';
+
 // Pages styles
 @import 'pages/home';
+@import 'pages/portfolio';
 
 // Flash messages
 .flash-notice,

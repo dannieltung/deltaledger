@@ -18,6 +18,8 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
+    <%= render 'shared/navbar' %>
+
     <% if flash[:notice] %>
       <div class="flash-notice">
         <%= flash[:notice] %>

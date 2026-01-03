@@ -1,0 +1,101 @@
+<div class="portfolio-container">
+  <div class="portfolio-header">
+    <h1 class="portfolio-title">
+      <i class="bi bi-briefcase"></i>
+      Portfolio de Opções
+    </h1>
+    <%= link_to root_path, class: "back-link" do %>
+      <i class="bi bi-arrow-left"></i>
+      Voltar para Home
+    <% end %>
+  </div>
+
+  <div class="portfolio-stats">
+    <div class="stat-card">
+      <div class="stat-label">Total de Trades</div>
+      <div class="stat-value"><%= @option_trades.count %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Compras</div>
+      <div class="stat-value"><%= @option_trades.where(operation_type: 'buy').count %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Vendas</div>
+      <div class="stat-value"><%= @option_trades.where(operation_type: 'sell').count %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">CALLs</div>
+      <div class="stat-value"><%= @option_trades.where(option_type: 'call').count %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">PUTs</div>
+      <div class="stat-value"><%= @option_trades.where(option_type: 'put').count %></div>
+    </div>
+  </div>
+
+  <div class="portfolio-table-container">
+    <div class="portfolio-table-wrapper">
+      <table class="portfolio-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Operação</th>
+            <th>Tipo</th>
+            <th>Ativo</th>
+            <th>Código</th>
+            <th>Strike</th>
+            <th>Quantidade</th>
+            <th>Prêmio</th>
+            <th>Prêmio Líq.</th>
+            <th>Total</th>
+            <th>Yield %</th>
+            <th>Notional</th>
+            <th>Vencimento</th>
+            <th>Encerramento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @option_trades.present? %>
+            <% @option_trades.each do |trade| %>
+              <tr>
+                <td><%= trade.trade_date.strftime("%d/%m/%y") if trade.trade_date %></td>
+                <td>
+                  <span class="trade-badge <%= trade.operation_type %>">
+                    <%= trade.operation_type == 'buy' ? 'Compra' : 'Venda' %>
+                  </span>
+                </td>
+                <td>
+                  <span class="trade-badge <%= trade.option_type %>">
+                    <%= trade.option_type&.upcase %>
+                  </span>
+                </td>
+                <td class="trade-asset"><%= trade.underlying_asset %></td>
+                <td class="trade-code"><%= trade.option_code %></td>
+                <td><%= number_to_currency(trade.strike_price, unit: "R$ ", separator: ",", delimiter: ".") if trade.strike_price %></td>
+                <td><%= number_with_delimiter(trade.quantity, delimiter: ".") %></td>
+                <td><%= number_to_currency(trade.premium, unit: "R$ ", separator: ",", delimiter: ".") if trade.premium %></td>
+                <td><%= number_to_currency(trade.net_premium, unit: "R$ ", separator: ",", delimiter: ".") if trade.net_premium %></td>
+                <td class="trade-total">
+                  <%= number_to_currency((trade.net_premium || trade.premium) * trade.quantity, unit: "R$ ", separator: ",", delimiter: ".") if (trade.premium && trade.quantity) %>
+                </td>
+                <td><%= "#{number_with_precision(trade.premium_yield, precision: 2)}%" if trade.premium_yield %></td>
+                <td class="trade-notional">
+                  <%= number_to_currency(trade.notional, unit: "R$ ", separator: ",", delimiter: ".") if trade.notional %>
+                </td>
+                <td><%= trade.expiration_date.strftime("%d/%m/%y") if trade.expiration_date %></td>
+                <td><%= trade.close_date.strftime("%d/%m/%y") if trade.close_date %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="14" class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <p>Nenhum trade registrado ainda</p>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

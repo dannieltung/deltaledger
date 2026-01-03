@@ -1,0 +1,276 @@
+// Variáveis (reutilizando as mesmas)
+$primary-color: #667eea;
+$primary-dark: #5568d3;
+$secondary-color: #764ba2;
+$text-dark: #2d3748;
+$text-medium: #4a5568;
+$text-light: #718096;
+$border-color: #e2e8f0;
+$white: #ffffff;
+
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-xxl: 3rem;
+
+$border-radius: 8px;
+$border-radius-lg: 16px;
+
+// Container principal do portfolio
+.portfolio-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  padding: $spacing-xl;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+// Header do portfolio
+.portfolio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xl;
+}
+
+.portfolio-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  i {
+    font-size: 1.8rem;
+  }
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: 0.75rem $spacing-lg;
+  background: rgba(255, 255, 255, 0.2);
+  color: $white;
+  border-radius: $border-radius;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+// Stats cards
+.portfolio-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+}
+
+.stat-card {
+  background: $white;
+  border-radius: $border-radius;
+  padding: $spacing-lg;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: $text-medium;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: $spacing-sm;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $primary-color;
+}
+
+// Table container
+.portfolio-table-container {
+  background: $white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-xl;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 400px);
+  border: 2px solid $border-color;
+  border-radius: $border-radius;
+
+  // Estilo da scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $primary-color;
+    border-radius: 4px;
+
+    &:hover {
+      background: $primary-dark;
+    }
+  }
+}
+
+.portfolio-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $white;
+  font-size: 0.875rem;
+
+  thead {
+    background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    tr {
+      th {
+        padding: $spacing-md;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 700;
+        color: $white;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        border-bottom: 2px solid $white;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: all 0.2s ease;
+      border-bottom: 1px solid $border-color;
+
+      &:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: $spacing-md;
+        text-align: center;
+        vertical-align: middle;
+        color: $text-dark;
+        white-space: nowrap;
+
+        &.trade-code {
+          font-weight: 700;
+          color: $primary-color;
+        }
+
+        &.trade-asset {
+          font-weight: 600;
+          color: $text-medium;
+        }
+
+        &.trade-total {
+          font-weight: 700;
+          color: $primary-color;
+        }
+
+        &.trade-notional {
+          font-weight: 700;
+          color: $secondary-color;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  padding: $spacing-xxl !important;
+  text-align: center;
+
+  i {
+    font-size: 3rem;
+    color: $text-light;
+    margin-bottom: $spacing-md;
+    display: block;
+  }
+
+  p {
+    color: $text-medium;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .portfolio-container {
+    padding: $spacing-md;
+  }
+
+  .portfolio-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+  }
+
+  .portfolio-title {
+    font-size: 1.5rem;
+  }
+
+  .portfolio-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .portfolio-table-container {
+    padding: $spacing-md;
+  }
+
+  .portfolio-table {
+    font-size: 0.75rem;
+
+    thead tr th,
+    tbody tr td {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <%= link_to root_path, class: "brand-link" do %>
+        <i class="bi bi-graph-up-arrow"></i>
+        <span>DeltaLedger</span>
+      <% end %>
+    </div>
+    <% if user_signed_in? %>
+      <div class="navbar-menu">
+        <%= link_to portfolio_path, class: "nav-link #{current_page?(portfolio_path) ? 'active' : ''}" do %>
+          <i class="bi bi-briefcase"></i>
+          <span>Portfolio</span>
+        <% end %>
+      </div>
+      <div class="navbar-actions">
+        <div class="user-info">
+          <i class="bi bi-person-circle"></i>
+          <span><%= current_user.email.split('@').first %></span>
+        </div>
+        <%= button_to destroy_user_session_path, method: :delete, class: "logout-btn" do %>
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sair</span>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="navbar-actions">
+        <%= link_to "Entrar", new_user_session_path, class: "login-btn" %>
+        <%= link_to "Cadastrar", new_user_registration_path, class: "signup-btn" %>
+      </div>
+    <% end %>
+  </div>
+</nav>

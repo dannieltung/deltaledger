@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   # Option Trades
   resources :option_trades, only: [:create]
+  get "portfolio", to: "option_trades#portfolio", as: :portfolio
 
   get "pages/home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

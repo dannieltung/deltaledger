@@ -3,6 +3,10 @@ class OptionTradesController < ApplicationController
   before_action :parse_dates, only: [ :create ]
   before_action :parse_decimals, only: [ :create ]
 
+  def portfolio
+    @option_trades = current_user.option_trades.order(trade_date: :desc)
+  end
+
   def create
     @option_trade = current_user.option_trades.build(option_trade_params)
 
