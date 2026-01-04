@@ -180,6 +180,19 @@ $border-radius-lg: 16px;
           background-color: rgba(102, 126, 234, 0.08);
           box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
         }
+
+        &.closed-trade {
+          opacity: 0.5;
+          filter: grayscale(50%);
+          background-color: rgba(0, 0, 0, 0.02);
+          transition: all 0.3s ease;
+
+          &:hover {
+            opacity: 0.7;
+            filter: grayscale(30%);
+            background-color: rgba(102, 126, 234, 0.05);
+          }
+        }
       }
 
       &:last-child {

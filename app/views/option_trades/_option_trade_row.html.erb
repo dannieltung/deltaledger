@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(option_trade) %>" class="clickable-row" onclick="window.location='<%= option_trade_path(option_trade) %>'" style="cursor: pointer;">
+<tr id="<%= dom_id(option_trade) %>" class="clickable-row <%= 'closed-trade' if option_trade.close_date.present? %>" onclick="window.location='<%= option_trade_path(option_trade) %>'" style="cursor: pointer;">
   <td><%= option_trade.trade_date.strftime('%d/%m/%y') %></td>
   <td>
     <span class="trade-badge <%= option_trade.operation_type %>">

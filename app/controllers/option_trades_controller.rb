@@ -1,7 +1,7 @@
 class OptionTradesController < ApplicationController
   before_action :authenticate_user!
-  before_action :parse_dates, only: [ :create ]
-  before_action :parse_decimals, only: [ :create ]
+  before_action :parse_dates, only: [ :create, :update ]
+  before_action :parse_decimals, only: [ :create, :update ]
 
   def portfolio
     parsed_filters = parse_filter_dates
@@ -21,6 +21,21 @@ class OptionTradesController < ApplicationController
                                   .where(option_code: @option_trade.option_code)
                                   .where.not(id: @option_trade.id)
                                   .order(trade_date: :desc)
+  end
+
+  def edit
+    @option_trade = current_user.option_trades.find(params[:id])
+  end
+
+  def update
+    @option_trade = current_user.option_trades.find(params[:id])
+
+    if @option_trade.update(option_trade_params)
+      redirect_to option_trade_path(@option_trade), notice: "Operação atualizada com sucesso!"
+    else
+      flash.now[:alert] = "Erro ao atualizar trade: #{@option_trade.errors.full_messages.join(', ')}"
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy

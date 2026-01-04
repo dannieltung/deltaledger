@@ -1,0 +1,188 @@
+<div class="trade-detail-container">
+  <div class="trade-detail-header">
+    <%= link_to option_trade_path(@option_trade), class: "back-link" do %>
+      <i class="bi bi-arrow-left"></i>
+      <span>Voltar</span>
+    <% end %>
+    <h1 class="trade-detail-title">
+      <i class="bi bi-pencil-square"></i>
+      Editar Operação
+    </h1>
+  </div>
+
+  <div class="edit-form-container">
+    <%= simple_form_for @option_trade, url: option_trade_path(@option_trade), method: :patch, html: { class: 'edit-form' } do |f| %>
+      <div class="edit-form-section">
+        <h2 class="edit-section-title">
+          <i class="bi bi-calendar"></i>
+          Informações Gerais
+        </h2>
+
+        <div class="edit-form-grid">
+          <div class="edit-form-group">
+            <%= f.input :trade_date,
+                      as: :string,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: 'DD/MM/AA',
+                        value: @option_trade.trade_date&.strftime('%d/%m/%y'),
+                        data: {
+                          controller: 'date-input',
+                          action: 'input->date-input#input paste->date-input#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :operation_type,
+                      collection: [['Compra', 'buy'], ['Venda', 'sell']],
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: { class: 'edit-input' } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :option_type,
+                      collection: [['CALL', 'call'], ['PUT', 'put']],
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: { class: 'edit-input' } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-form-section">
+        <h2 class="edit-section-title">
+          <i class="bi bi-graph-up"></i>
+          Detalhes da Opção
+        </h2>
+
+        <div class="edit-form-grid">
+          <div class="edit-form-group">
+            <%= f.input :underlying_asset,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: 'Ex: PETR4',
+                        data: {
+                          controller: 'option-code',
+                          action: 'input->option-code#input paste->option-code#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :option_code,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: 'Ex: PETRC50',
+                        data: {
+                          controller: 'option-code',
+                          action: 'input->option-code#input paste->option-code#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :strike_price,
+                      as: :string,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: '0,00',
+                        value: @option_trade.strike_price ? number_with_precision(@option_trade.strike_price, precision: 2, separator: ',', delimiter: '.') : '',
+                        data: {
+                          controller: 'currency-input',
+                          action: 'input->currency-input#input paste->currency-input#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :quantity,
+                      as: :string,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: '100',
+                        data: {
+                          controller: 'integer-input',
+                          action: 'input->integer-input#input paste->integer-input#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :premium,
+                      as: :string,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: '0,00',
+                        value: @option_trade.premium ? number_with_precision(@option_trade.premium, precision: 2, separator: ',', delimiter: '.') : '',
+                        data: {
+                          controller: 'currency-input',
+                          action: 'input->currency-input#input paste->currency-input#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :expiration_date,
+                      as: :string,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: 'DD/MM/AA',
+                        value: @option_trade.expiration_date&.strftime('%d/%m/%y'),
+                        data: {
+                          controller: 'date-input',
+                          action: 'input->date-input#input paste->date-input#paste'
+                        }
+                      } %>
+          </div>
+
+          <div class="edit-form-group">
+            <%= f.input :close_date,
+                      as: :string,
+                      wrapper: false,
+                      required: false,
+                      label_html: { class: 'edit-label' },
+                      input_html: {
+                        class: 'edit-input',
+                        placeholder: 'DD/MM/AA',
+                        value: @option_trade.close_date&.strftime('%d/%m/%y'),
+                        data: {
+                          controller: 'date-input',
+                          action: 'input->date-input#input paste->date-input#paste'
+                        }
+                      } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-form-actions">
+        <%= f.button :submit, "Atualizar Operação", class: "edit-submit-btn" %>
+        <%= link_to "Cancelar", option_trade_path(@option_trade), class: "edit-cancel-btn" %>
+      </div>
+    <% end %>
+  </div>
+</div>

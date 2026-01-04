@@ -269,7 +269,7 @@
         <tbody>
           <% if @option_trades.present? %>
             <% @option_trades.each do |trade| %>
-              <tr class="clickable-row" onclick="window.location='<%= option_trade_path(trade) %>'" style="cursor: pointer;">
+              <tr class="clickable-row <%= 'closed-trade' if trade.close_date.present? %>" onclick="window.location='<%= option_trade_path(trade) %>'" style="cursor: pointer;">
                 <td><%= trade.trade_date.strftime("%d/%m/%y") if trade.trade_date %></td>
                 <td>
                   <span class="trade-badge <%= trade.operation_type %>">
