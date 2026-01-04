@@ -33,5 +33,25 @@
       </div>
     <% end %>
     <%= yield %>
+
+    <script>
+      // Auto-remove flash messages after 2 seconds
+      document.addEventListener('turbo:load', function() {
+        const flashMessages = document.querySelectorAll('.flash-notice, .flash-alert');
+        flashMessages.forEach(function(flash) {
+          setTimeout(function() {
+            if (flash && flash.parentElement) {
+              flash.style.opacity = '0';
+              flash.style.transform = 'translateX(100%)';
+              setTimeout(function() {
+                if (flash && flash.parentElement) {
+                  flash.remove();
+                }
+              }, 300);
+            }
+          }, 2000);
+        });
+      });
+    </script>
   </body>
 </html>

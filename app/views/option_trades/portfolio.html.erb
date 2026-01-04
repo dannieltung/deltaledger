@@ -33,6 +33,218 @@
     </div>
   </div>
 
+  <div class="search-container">
+    <%= form_with(url: portfolio_path, method: :get, class: "search-form", data: { turbo: false }) do |f| %>
+      <div class="search-wrapper">
+        <%= f.text_field :q,
+            value: params[:q],
+            placeholder: "Buscar por ativo ou código da opção...",
+            class: "search-input" %>
+        <%= f.submit "Buscar", class: "search-btn" %>
+        <% if params[:q].present? %>
+          <%= link_to "Limpar", portfolio_path, class: "clear-btn" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="controls-wrapper">
+    <div class="filter-container" data-controller="sort">
+      <button type="button" class="filter-toggle-btn" data-action="click->sort#toggle">
+        <i class="bi bi-funnel"></i>
+        <span>Filtrar por</span>
+        <i class="bi bi-chevron-down" data-sort-target="chevron"></i>
+        <%
+          active_filters = 0
+          active_filters += 1 if params.dig(:filter, :trade_date_start).present? || params.dig(:filter, :trade_date_end).present?
+          active_filters += 1 if params.dig(:filter, :operation_type).present?
+          active_filters += 1 if params.dig(:filter, :option_type).present?
+          active_filters += 1 if params.dig(:filter, :underlying_asset).present?
+          active_filters += 1 if params.dig(:filter, :expiration_date_start).present? || params.dig(:filter, :expiration_date_end).present?
+        %>
+        <% if active_filters > 0 %>
+          <span class="filter-badge"><%= active_filters %></span>
+        <% end %>
+      </button>
+
+      <div class="filter-content" data-sort-target="content">
+        <%= form_with(url: portfolio_path, method: :get, class: "filter-form", data: { turbo: false }) do |f| %>
+          <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
+          <% params[:sort]&.each do |key, value| %>
+            <%= hidden_field_tag "sort[#{key}]", value %>
+          <% end %>
+
+          <div class="filter-fields-list">
+            <div class="filter-field-group">
+              <label class="filter-group-label">Data</label>
+              <div class="filter-date-range">
+                <%= text_field_tag "filter[trade_date_start]",
+                    params.dig(:filter, :trade_date_start),
+                    placeholder: "DD/MM/AA",
+                    class: "filter-input filter-date",
+                    data: {
+                      controller: 'date-input',
+                      action: 'input->date-input#input paste->date-input#paste'
+                    } %>
+                <span class="filter-separator">até</span>
+                <%= text_field_tag "filter[trade_date_end]",
+                    params.dig(:filter, :trade_date_end),
+                    placeholder: "DD/MM/AA",
+                    class: "filter-input filter-date",
+                    data: {
+                      controller: 'date-input',
+                      action: 'input->date-input#input paste->date-input#paste'
+                    } %>
+              </div>
+            </div>
+
+            <div class="filter-field-group">
+              <label class="filter-group-label">Operação</label>
+              <%= select_tag "filter[operation_type]",
+                  options_for_select([["Todos", ""], ["Compra", "buy"], ["Venda", "sell"]], params.dig(:filter, :operation_type)),
+                  class: "filter-select" %>
+            </div>
+
+            <div class="filter-field-group">
+              <label class="filter-group-label">Tipo</label>
+              <%= select_tag "filter[option_type]",
+                  options_for_select([["Todos", ""], ["CALL", "call"], ["PUT", "put"]], params.dig(:filter, :option_type)),
+                  class: "filter-select" %>
+            </div>
+
+            <div class="filter-field-group">
+              <label class="filter-group-label">Ativo</label>
+              <%= text_field_tag "filter[underlying_asset]",
+                  params.dig(:filter, :underlying_asset),
+                  placeholder: "Ex: PETR4",
+                  class: "filter-input",
+                  data: {
+                    controller: 'option-code',
+                    action: 'input->option-code#input paste->option-code#paste'
+                  } %>
+            </div>
+
+            <div class="filter-field-group">
+              <label class="filter-group-label">Vencimento</label>
+              <div class="filter-date-range">
+                <%= text_field_tag "filter[expiration_date_start]",
+                    params.dig(:filter, :expiration_date_start),
+                    placeholder: "DD/MM/AA",
+                    class: "filter-input filter-date",
+                    data: {
+                      controller: 'date-input',
+                      action: 'input->date-input#input paste->date-input#paste'
+                    } %>
+                <span class="filter-separator">até</span>
+                <%= text_field_tag "filter[expiration_date_end]",
+                    params.dig(:filter, :expiration_date_end),
+                    placeholder: "DD/MM/AA",
+                    class: "filter-input filter-date",
+                    data: {
+                      controller: 'date-input',
+                      action: 'input->date-input#input paste->date-input#paste'
+                    } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <%= f.submit "Aplicar", class: "search-btn" %>
+            <% if active_filters > 0 %>
+              <%= link_to "Limpar", portfolio_path(q: params[:q], sort: params[:sort]&.to_unsafe_h), class: "clear-btn" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="sort-container" data-controller="sort">
+      <button type="button" class="sort-toggle-btn" data-action="click->sort#toggle">
+        <i class="bi bi-sort-down"></i>
+        <span>Ordenar por</span>
+        <i class="bi bi-chevron-down" data-sort-target="chevron"></i>
+        <% if params[:sort].present? %>
+          <span class="sort-badge"><%= params[:sort].keys.length %></span>
+        <% end %>
+      </button>
+      <div class="sort-content" data-sort-target="content">
+        <%= form_with(url: portfolio_path, method: :get, class: "sort-form", data: { turbo: false }) do |f| %>
+          <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
+          <% params[:filter]&.each do |key, value| %>
+            <%= hidden_field_tag "filter[#{key}]", value %>
+          <% end %>
+          <div class="sort-fields-list">
+            <div class="sort-field-item">
+              <label class="sort-label">
+                <%= check_box_tag "sort[trade_date]",
+                    params.dig(:sort, :trade_date) || "desc",
+                    params.dig(:sort, :trade_date).present?,
+                    class: "sort-checkbox",
+                    data: { action: "change->sort#toggleField" } %>
+                <span>Data</span>
+              </label>
+              <%= select_tag "sort[trade_date]",
+                  options_for_select([["↓ Decrescente", "desc"], ["↑ Crescente", "asc"]], params.dig(:sort, :trade_date) || "desc"),
+                  class: "sort-select",
+                  disabled: params.dig(:sort, :trade_date).blank? %>
+            </div>
+
+            <div class="sort-field-item">
+              <label class="sort-label">
+                <%= check_box_tag "sort[option_code]",
+                    params.dig(:sort, :option_code) || "asc",
+                    params.dig(:sort, :option_code).present?,
+                    class: "sort-checkbox",
+                    data: { action: "change->sort#toggleField" } %>
+                <span>Código</span>
+              </label>
+              <%= select_tag "sort[option_code]",
+                  options_for_select([["A→Z", "asc"], ["Z→A", "desc"]], params.dig(:sort, :option_code) || "asc"),
+                  class: "sort-select",
+                  disabled: params.dig(:sort, :option_code).blank? %>
+            </div>
+
+            <div class="sort-field-item">
+              <label class="sort-label">
+                <%= check_box_tag "sort[expiration_date]",
+                    params.dig(:sort, :expiration_date) || "asc",
+                    params.dig(:sort, :expiration_date).present?,
+                    class: "sort-checkbox",
+                    data: { action: "change->sort#toggleField" } %>
+                <span>Vencimento</span>
+              </label>
+              <%= select_tag "sort[expiration_date]",
+                  options_for_select([["↑ Crescente", "asc"], ["↓ Decrescente", "desc"]], params.dig(:sort, :expiration_date) || "asc"),
+                  class: "sort-select",
+                  disabled: params.dig(:sort, :expiration_date).blank? %>
+            </div>
+
+            <div class="sort-field-item">
+              <label class="sort-label">
+                <%= check_box_tag "sort[notional]",
+                    params.dig(:sort, :notional) || "desc",
+                    params.dig(:sort, :notional).present?,
+                    class: "sort-checkbox",
+                    data: { action: "change->sort#toggleField" } %>
+                <span>Notional</span>
+              </label>
+              <%= select_tag "sort[notional]",
+                  options_for_select([["↓ Decrescente", "desc"], ["↑ Crescente", "asc"]], params.dig(:sort, :notional) || "desc"),
+                  class: "sort-select",
+                  disabled: params.dig(:sort, :notional).blank? %>
+            </div>
+          </div>
+          <div class="sort-actions">
+            <%= f.submit "Aplicar", class: "search-btn" %>
+            <% if params[:sort].present? %>
+              <%= link_to "Limpar", portfolio_path(q: params[:q], filter: params[:filter]&.to_unsafe_h), class: "clear-btn" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <div class="portfolio-table-container">
     <div class="portfolio-table-wrapper">
       <table class="portfolio-table">
@@ -48,7 +260,7 @@
             <th>Prêmio</th>
             <th>Prêmio Líq.</th>
             <th>Total</th>
-            <th>Yield %</th>
+            <th>Yield</th>
             <th>Notional</th>
             <th>Vencimento</th>
             <th>Encerramento</th>
@@ -57,7 +269,7 @@
         <tbody>
           <% if @option_trades.present? %>
             <% @option_trades.each do |trade| %>
-              <tr>
+              <tr class="clickable-row" onclick="window.location='<%= option_trade_path(trade) %>'" style="cursor: pointer;">
                 <td><%= trade.trade_date.strftime("%d/%m/%y") if trade.trade_date %></td>
                 <td>
                   <span class="trade-badge <%= trade.operation_type %>">
@@ -78,7 +290,7 @@
                 <td class="trade-total">
                   <%= number_to_currency((trade.net_premium || trade.premium) * trade.quantity, unit: "R$ ", separator: ",", delimiter: ".") if (trade.premium && trade.quantity) %>
                 </td>
-                <td><%= "#{number_with_precision(trade.premium_yield, precision: 2)}%" if trade.premium_yield %></td>
+                <td class="trade-yield"><%= trade.premium_yield.present? ? "#{number_with_precision(trade.premium_yield, precision: 2, separator: ',')}%" : '-' %></td>
                 <td class="trade-notional">
                   <%= number_to_currency(trade.notional, unit: "R$ ", separator: ",", delimiter: ".") if trade.notional %>
                 </td>

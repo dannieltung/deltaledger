@@ -10,6 +10,7 @@ class OptionTrade < ApplicationRecord
 
   before_validation :calculate_net_premium
   before_validation :calculate_notional
+  before_validation :calculate_premium_yield
 
   # Scope de busca por underlying_asset e option_code
   scope :search, ->(query) {
@@ -110,5 +111,12 @@ class OptionTrade < ApplicationRecord
     return if quantity.nil? || strike_price.nil?
 
     self.notional = quantity * strike_price
+  end
+
+  # Calcula o yield do prêmio em porcentagem (net_premium / strike_price × 100)
+  def calculate_premium_yield
+    return if net_premium.nil? || strike_price.nil? || strike_price.zero?
+
+    self.premium_yield = (net_premium / strike_price) * 100
   end
 end

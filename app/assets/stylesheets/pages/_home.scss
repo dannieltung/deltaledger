@@ -775,6 +775,12 @@ $border-radius-lg: 16px;
           color: $primary-color;
         }
 
+        &.trade-yield {
+          font-weight: 700;
+          color: #48bb78;
+          font-size: 0.9rem;
+        }
+
         &.trade-notional {
           font-weight: 700;
           color: $secondary-color;

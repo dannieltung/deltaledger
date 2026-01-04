@@ -15,8 +15,7 @@
       <% end %>
       <%= button_to option_trade_path(@option_trade),
           method: :delete,
-          class: "delete-btn",
-          data: { turbo_confirm: "Tem certeza que deseja deletar esta operação?" } do %>
+          class: "delete-btn" do %>
         <i class="bi bi-trash"></i>
         <span>Deletar</span>
       <% end %>

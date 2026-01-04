@@ -173,8 +173,13 @@ $border-radius-lg: 16px;
       transition: all 0.2s ease;
       border-bottom: 1px solid $border-color;
 
-      &:hover {
-        background-color: rgba(102, 126, 234, 0.05);
+      &.clickable-row {
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(102, 126, 234, 0.08);
+          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+        }
       }
 
       &:last-child {
@@ -201,6 +206,12 @@ $border-radius-lg: 16px;
         &.trade-total {
           font-weight: 700;
           color: $primary-color;
+        }
+
+        &.trade-yield {
+          font-weight: 700;
+          color: #48bb78;
+          font-size: 0.9rem;
         }
 
         &.trade-notional {

@@ -14,6 +14,7 @@
   <td><%= option_trade.quantity %></td>
   <td>R$ <%= number_to_currency(option_trade.strike_price, unit: '', precision: 2, separator: ',') %></td>
   <td class="trade-net-premium">R$ <%= number_to_currency(option_trade.premium || 0, unit: '', precision: 2, separator: ',') %></td>
+  <td class="trade-yield"><%= option_trade.premium_yield.present? ? "#{number_with_precision(option_trade.premium_yield, precision: 2, separator: ',')}%" : '-' %></td>
   <td class="trade-total">R$ <%= number_to_currency(option_trade.net_premium * option_trade.quantity, unit: '', precision: 2, separator: ',') %></td>
   <td><%= option_trade.expiration_date.strftime('%d/%m/%y') %></td>
   <td class="trade-notional">R$ <%= number_to_currency(option_trade.strike_price * option_trade.quantity, unit: '', delimiter: '.', precision: 2, separator: ',') %></td>
