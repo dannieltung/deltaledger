@@ -1,0 +1,177 @@
+<div class="trade-detail-container">
+  <div class="trade-detail-header">
+    <%= link_to root_path, class: "back-link" do %>
+      <i class="bi bi-arrow-left"></i>
+      <span>Voltar</span>
+    <% end %>
+    <h1 class="trade-detail-title">
+      <i class="bi bi-file-text"></i>
+      <%= @option_trade.option_code %>
+    </h1>
+    <div class="trade-detail-actions">
+      <%= link_to edit_option_trade_path(@option_trade), class: "edit-btn" do %>
+        <i class="bi bi-pencil-square"></i>
+        <span>Editar</span>
+      <% end %>
+      <%= button_to option_trade_path(@option_trade),
+          method: :delete,
+          class: "delete-btn",
+          data: { turbo_confirm: "Tem certeza que deseja deletar esta operação?" } do %>
+        <i class="bi bi-trash"></i>
+        <span>Deletar</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="trade-detail-main">
+    <div class="trade-detail-card">
+      <h2 class="detail-section-title">
+        <i class="bi bi-info-circle"></i>
+        Detalhes da Operação
+      </h2>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="detail-label">Data</span>
+          <span class="detail-value"><%= @option_trade.trade_date.strftime('%d/%m/%Y') %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Operação</span>
+          <span class="detail-value">
+            <span class="trade-badge <%= @option_trade.operation_type %>">
+              <%= @option_trade.operation_type == 'buy' ? 'COMPRA' : 'VENDA' %>
+            </span>
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Tipo</span>
+          <span class="detail-value">
+            <span class="trade-badge <%= @option_trade.option_type %>">
+              <%= @option_trade.option_type.upcase %>
+            </span>
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Ativo Subjacente</span>
+          <span class="detail-value"><%= @option_trade.underlying_asset %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Código da Opção</span>
+          <span class="detail-value highlight"><%= @option_trade.option_code %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Strike</span>
+          <span class="detail-value">R$ <%= number_to_currency(@option_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Quantidade</span>
+          <span class="detail-value"><%= @option_trade.quantity %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Prêmio</span>
+          <span class="detail-value">R$ <%= number_to_currency(@option_trade.premium || 0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Yield do Prêmio</span>
+          <span class="detail-value">
+            <% if @option_trade.premium_yield.present? %>
+              <%= number_to_percentage(@option_trade.premium_yield, precision: 2, separator: ',') %>
+            <% else %>
+              -
+            <% end %>
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Total</span>
+          <span class="detail-value highlight">R$ <%= number_to_currency(@option_trade.net_premium * @option_trade.quantity, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Notional</span>
+          <span class="detail-value highlight">R$ <%= number_to_currency(@option_trade.notional || (@option_trade.strike_price * @option_trade.quantity), unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Vencimento</span>
+          <span class="detail-value"><%= @option_trade.expiration_date.strftime('%d/%m/%Y') %></span>
+        </div>
+
+        <% if @option_trade.close_date.present? %>
+          <div class="detail-item">
+            <span class="detail-label">Data de Fechamento</span>
+            <span class="detail-value"><%= @option_trade.close_date.strftime('%d/%m/%Y') %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @related_trades.any? %>
+      <div class="related-trades-card">
+        <h2 class="detail-section-title">
+          <i class="bi bi-link-45deg"></i>
+          Operações Relacionadas (<%= @related_trades.count %>)
+          <span class="related-subtitle">Mesmo código: <%= @option_trade.option_code %></span>
+        </h2>
+
+        <div class="related-trades-wrapper">
+          <table class="related-trades-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Operação</th>
+                <th>Qtd</th>
+                <th>Strike</th>
+                <th>Prêmio</th>
+                <th>Total</th>
+                <th>Vencimento</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @related_trades.each do |trade| %>
+                <tr>
+                  <td><%= trade.trade_date.strftime('%d/%m/%y') %></td>
+                  <td>
+                    <span class="trade-badge <%= trade.operation_type %>">
+                      <%= trade.operation_type == 'buy' ? 'COMPRA' : 'VENDA' %>
+                    </span>
+                  </td>
+                  <td><%= trade.quantity %></td>
+                  <td>R$ <%= number_to_currency(trade.strike_price, unit: '', precision: 2, separator: ',') %></td>
+                  <td>R$ <%= number_to_currency(trade.premium || 0, unit: '', precision: 2, separator: ',') %></td>
+                  <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
+                  <td><%= trade.expiration_date.strftime('%d/%m/%y') %></td>
+                  <td>
+                    <%= link_to option_trade_path(trade), class: "view-link" do %>
+                      <i class="bi bi-eye"></i>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="related-trades-card">
+        <h2 class="detail-section-title">
+          <i class="bi bi-link-45deg"></i>
+          Operações Relacionadas
+        </h2>
+        <div class="empty-related">
+          <i class="bi bi-inbox"></i>
+          <p>Nenhuma outra operação com o código <%= @option_trade.option_code %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

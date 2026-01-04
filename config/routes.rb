@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # Option Trades
-  resources :option_trades, only: [:create]
+  resources :option_trades, only: [:create, :show, :edit, :update, :destroy]
   get "portfolio", to: "option_trades#portfolio", as: :portfolio
 
   get "pages/home"

@@ -7,6 +7,14 @@ class OptionTradesController < ApplicationController
     @option_trades = current_user.option_trades.order(trade_date: :desc)
   end
 
+  def show
+    @option_trade = current_user.option_trades.find(params[:id])
+    @related_trades = current_user.option_trades
+                                  .where(option_code: @option_trade.option_code)
+                                  .where.not(id: @option_trade.id)
+                                  .order(trade_date: :desc)
+  end
+
   def create
     @option_trade = current_user.option_trades.build(option_trade_params)
 
