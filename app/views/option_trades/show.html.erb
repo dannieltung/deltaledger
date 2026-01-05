@@ -21,20 +21,17 @@
       <% end %>
     </div>
   </div>
-
   <div class="trade-detail-main">
     <div class="trade-detail-card">
       <h2 class="detail-section-title">
         <i class="bi bi-info-circle"></i>
         Detalhes da Operação
       </h2>
-
       <div class="detail-grid">
         <div class="detail-item">
           <span class="detail-label">Data</span>
           <span class="detail-value"><%= @option_trade.trade_date.strftime('%d/%m/%Y') %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Operação</span>
           <span class="detail-value">
@@ -43,7 +40,6 @@
             </span>
           </span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Tipo</span>
           <span class="detail-value">
@@ -52,32 +48,26 @@
             </span>
           </span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Ativo Subjacente</span>
           <span class="detail-value"><%= @option_trade.underlying_asset %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Código da Opção</span>
           <span class="detail-value highlight"><%= @option_trade.option_code %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Strike</span>
           <span class="detail-value">R$ <%= number_to_currency(@option_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Quantidade</span>
           <span class="detail-value"><%= @option_trade.quantity %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Prêmio</span>
           <span class="detail-value">R$ <%= number_to_currency(@option_trade.premium || 0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Yield do Prêmio</span>
           <span class="detail-value">
@@ -88,31 +78,49 @@
             <% end %>
           </span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Total</span>
           <span class="detail-value highlight">R$ <%= number_to_currency(@option_trade.net_premium * @option_trade.quantity, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
         </div>
-
         <div class="detail-item">
           <span class="detail-label">Notional</span>
           <span class="detail-value highlight">R$ <%= number_to_currency(@option_trade.notional || (@option_trade.strike_price * @option_trade.quantity), unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
         </div>
-
-        <div class="detail-item">
-          <span class="detail-label">Vencimento</span>
+        <div class="detail-item detail-item-expiration">
+          <span class="detail-label">
+            <i class="bi bi-calendar-event"></i>
+            Vencimento
+          </span>
           <span class="detail-value"><%= @option_trade.expiration_date.strftime('%d/%m/%Y') %></span>
         </div>
-
         <% if @option_trade.close_date.present? %>
-          <div class="detail-item">
-            <span class="detail-label">Data de Fechamento</span>
+          <div class="detail-item detail-item-closed">
+            <span class="detail-label">
+              <i class="bi bi-check-circle"></i>
+              Data de Fechamento
+            </span>
             <span class="detail-value"><%= @option_trade.close_date.strftime('%d/%m/%Y') %></span>
           </div>
         <% end %>
       </div>
     </div>
-
+    <div class="notional-summary-card">
+      <div class="notional-summary-header">
+        <i class="bi bi-calculator"></i>
+        <span class="notional-summary-title">Notional Total</span>
+      </div>
+      <div class="notional-summary-content">
+        <div class="notional-summary-label">
+          Somatória de todas <%= @option_trade.option_code %> vigentes: 
+        </div>
+        <div class="notional-summary-value">
+          R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %>
+        </div>
+        <div class="notional-summary-count">
+          <%= @related_trades.count %> <%= (@related_trades.count) == 1 ? 'operação' : 'operações' %> no total
+        </div>
+      </div>
+    </div>
     <% if @related_trades.any? %>
       <div class="related-trades-card">
         <h2 class="detail-section-title">
@@ -120,7 +128,6 @@
           Operações Relacionadas (<%= @related_trades.count %>)
           <span class="related-subtitle">Mesmo código: <%= @option_trade.option_code %></span>
         </h2>
-
         <div class="related-trades-wrapper">
           <table class="related-trades-table">
             <thead>

@@ -19,8 +19,15 @@ class OptionTradesController < ApplicationController
     @option_trade = current_user.option_trades.find(params[:id])
     @related_trades = current_user.option_trades
                                   .where(option_code: @option_trade.option_code)
-                                  .where.not(id: @option_trade.id)
+                                  .where.not(close_date: nil)
                                   .order(trade_date: :desc)
+
+    # Calcula a somatória do notional de todas as instâncias com o mesmo option_code
+    # Considera apenas instâncias onde close_date não é nil
+    @total_notional = current_user.option_trades
+                                  .where(option_code: @option_trade.option_code)
+                                  .where.not(close_date: nil)
+                                  .sum(:notional)
   end
 
   def edit
