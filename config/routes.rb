@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # Option Trades
+  get "option_trades/search_by_code", to: "option_trades#search_by_code", as: :search_by_code
   resources :option_trades, only: [:create, :show, :edit, :update, :destroy]
   get "portfolio", to: "option_trades#portfolio", as: :portfolio
 

@@ -19,14 +19,12 @@ class OptionTradesController < ApplicationController
     @option_trade = current_user.option_trades.find(params[:id])
     @related_trades = current_user.option_trades
                                   .where(option_code: @option_trade.option_code)
-                                  .where.not(close_date: nil)
+                                  .where.not(id: @option_trade.id)
                                   .order(trade_date: :desc)
 
     # Calcula a somatória do notional de todas as instâncias com o mesmo option_code
-    # Considera apenas instâncias onde close_date não é nil
     @total_notional = current_user.option_trades
                                   .where(option_code: @option_trade.option_code)
-                                  .where.not(close_date: nil)
                                   .sum(:notional)
   end
 
@@ -63,6 +61,31 @@ class OptionTradesController < ApplicationController
     else
       flash.now[:alert] = "Erro ao criar trade: #{@option_trade.errors.full_messages.join(', ')}"
       render "pages/home", status: :unprocessable_entity
+    end
+  end
+
+  def search_by_code
+    option_code = params[:option_code]&.strip&.upcase
+
+    if option_code.present?
+      trade = current_user.option_trades
+                          .where(option_code: option_code)
+                          .order(trade_date: :desc)
+                          .limit(1)
+                          .first
+
+      if trade
+        render json: {
+          found: true,
+          strike_price: trade.strike_price.to_f,
+          expiration_date: trade.expiration_date&.strftime('%d/%m/%y'),
+          underlying_asset: trade.underlying_asset
+        }
+      else
+        render json: { found: false }
+      end
+    else
+      render json: { found: false }
     end
   end
 

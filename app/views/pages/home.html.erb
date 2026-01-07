@@ -1,5 +1,5 @@
 <div class="home-container">
-  <div class="home-card">
+  <div class="home-card" data-controller="copy-values">
     <div class="calculator-form-container" data-controller="calculator">
       <h3 class="trade-form-title">
         <i class="bi bi-calculator"></i>
@@ -14,6 +14,7 @@
               class="trade-input"
               placeholder="0,00"
               data-calculator-target="strike"
+              data-copy-values-target="strikeSource"
               data-action="input->calculator#formatInput input->calculator#calculate"
               >
             </div>
@@ -24,12 +25,22 @@
               class="trade-input"
               placeholder="0,00"
               data-calculator-target="premium"
+              data-copy-values-target="premiumSource"
               data-action="input->calculator#formatInput input->calculator#calculate"
                 >
               </div>
               <div class="trade-form-group trade-form-group-centered">
                 <label class="trade-label">Yield</label>
-                <div class="trade-input" data-calculator-target="result" style="background-color: #f5f5f5;">0.00%</div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <div class="trade-input" data-calculator-target="result" style="background-color: #f5f5f5; flex: 1;">0.00%</div>
+                  <button
+                    type="button"
+                    class="trade-copy-btn"
+                    data-action="click->copy-values#copy"
+                    title="Copiar para operação">
+                    <i class="bi bi-arrow-down-circle"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -41,7 +52,7 @@
               Operação
             </h3>
             <div id="flash_messages"></div>
-            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form' } do |f| %>
+            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form', data: { controller: 'autofill-trade', autofill_trade_url_value: search_by_code_path } } do |f| %>
               <div class="trade-form-row">
                 <div class="trade-form-group">
                   <%= f.input :trade_date,
@@ -104,7 +115,8 @@
                               placeholder: 'Ex: PETRC50',
                               data: {
                                 controller: 'option-code',
-                                action: 'input->option-code#input paste->option-code#paste'
+                                autofill_trade_target: 'optionCode',
+                                action: 'input->option-code#input input->autofill-trade#search paste->option-code#paste'
                               }
                             } %>
                 </div>
@@ -119,6 +131,8 @@
                               placeholder: '0,00',
                               data: {
                                 controller: 'currency-input',
+                                copy_values_target: 'strikeDestination',
+                                autofill_trade_target: 'strikePrice',
                                 action: 'input->currency-input#input paste->currency-input#paste'
                               }
                             } %>
@@ -136,6 +150,7 @@
                               placeholder: '0,00',
                               data: {
                                 controller: 'currency-input',
+                                copy_values_target: 'premiumDestination',
                                 action: 'input->currency-input#input paste->currency-input#paste'
                               }
                             } %>
@@ -151,6 +166,7 @@
                               placeholder: 'DD/MM/AA',
                               data: {
                                 controller: 'date-input',
+                                autofill_trade_target: 'expirationDate',
                                 action: 'input->date-input#input paste->date-input#paste'
                               }
                             } %>
@@ -162,6 +178,7 @@
                             label_html: { class: 'trade-label' },
                             input_html: { class: 'trade-input', placeholder: 'Ex: PETR4', data: {
                               controller: 'option-code',
+                              autofill_trade_target: 'underlyingAsset',
                               action: 'input->option-code#input paste->option-code#paste'
                             } } %>
                 </div>
@@ -410,6 +427,12 @@
               </tbody>
             </table>
           </div>
+
+          <% if @option_trades.present? %>
+            <div class="pagination-container">
+              <%= paginate @option_trades %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

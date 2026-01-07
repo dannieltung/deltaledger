@@ -117,7 +117,7 @@
           R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %>
         </div>
         <div class="notional-summary-count">
-          <%= @related_trades.count %> <%= (@related_trades.count) == 1 ? 'operação' : 'operações' %> no total
+          <%= @related_trades.count + 1 %> <%= (@related_trades.count + 1) == 1 ? 'operação' : 'operações' %> no total
         </div>
       </div>
     </div>

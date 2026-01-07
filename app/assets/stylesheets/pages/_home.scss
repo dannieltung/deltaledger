@@ -155,6 +155,38 @@ $border-radius-lg: 16px;
   }
 }
 
+.trade-copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  color: $white;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 // Lista de Trades
 .trades-list-container {
   width: 100%;
@@ -927,5 +959,110 @@ $border-radius-lg: 16px;
 
   .home-card {
     padding: $spacing-lg $spacing-md;
+  }
+}
+
+// Paginação
+.pagination-container {
+  margin-top: $spacing-lg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav.pagination {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-family: inherit;
+
+  .page,
+  .first,
+  .prev,
+  .next,
+  .last,
+  .gap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 $spacing-md;
+    border: 2px solid $border-color;
+    border-radius: $border-radius;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-medium;
+    background: $white;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $primary-color;
+      color: $primary-color;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    }
+
+    &.current {
+      background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+      color: $white;
+      border-color: transparent;
+      cursor: default;
+      pointer-events: none;
+
+      &:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
+    &.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  .gap {
+    border: none;
+    background: transparent;
+    cursor: default;
+    pointer-events: none;
+    color: $text-light;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  nav.pagination {
+    .page,
+    .first,
+    .prev,
+    .next,
+    .last {
+      min-width: 36px;
+      height: 36px;
+      padding: 0 $spacing-sm;
+      font-size: 0.75rem;
+    }
   }
 }

@@ -11,6 +11,7 @@ class PagesController < ApplicationController
                                    .by_underlying_asset(filter_params[:underlying_asset])
                                    .by_expiration_date_range(parsed_filters[:expiration_date_start], parsed_filters[:expiration_date_end])
                                    .custom_sort(sort_params)
+                                   .page(params[:page]).per(15)
     end
   end
 
