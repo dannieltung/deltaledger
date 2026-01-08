@@ -30,6 +30,11 @@ class OptionTradesController < ApplicationController
     total_quantity = @option_trades.sum(:quantity)
     @average_net_premium = total_quantity > 0 ? total_weighted / total_quantity : 0
 
+    # Calcula a posição líquida: compras - vendas
+    buy_quantity = @option_trades.where(operation_type: 'buy').sum(:quantity)
+    sell_quantity = @option_trades.where(operation_type: 'sell').sum(:quantity)
+    @net_position = buy_quantity - sell_quantity
+
     # Pega informações básicas da série (do trade mais recente)
     @latest_trade = @option_trades.first
   end

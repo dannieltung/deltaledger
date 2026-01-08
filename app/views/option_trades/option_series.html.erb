@@ -17,7 +17,6 @@
       <% end %>
     </div>
   </div>
-
   <div class="trade-detail-main">
     <% if @latest_trade %>
       <div class="trade-detail-card">
@@ -46,12 +45,9 @@
             <span class="detail-label">Strike</span>
             <span class="detail-value">R$ <%= number_to_currency(@latest_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
           </div>
-          <div class="detail-item detail-item-expiration">
-            <span class="detail-label">
-              <i class="bi bi-calendar-event"></i>
-              Vencimento
-            </span>
-            <span class="detail-value"><%= @latest_trade.expiration_date.strftime('%d/%m/%Y') %></span>
+          <div class="detail-item">
+            <span class="detail-label">Total de Operações</span>
+            <span class="detail-value highlight"><%= @option_trades.count %></span>
           </div>
           <div class="detail-item detail-item-average">
             <span class="detail-label">
@@ -59,15 +55,27 @@
               Prêmio Médio
             </span>
             <span class="detail-value">R$ <%= number_to_currency(@average_net_premium, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
-            <%# <span class="detail-formula">Σ(net_premium × qty) ÷ Σ(qty)</span> %>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">Total de Operações</span>
-            <span class="detail-value highlight"><%= @option_trades.count %></span>
+          <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
+            <span class="detail-label">
+              <% if @net_position < 0 %>
+                <i class="bi bi-arrow-down-circle"></i>
+              <% else %>
+                <i class="bi bi-arrow-up-circle"></i>
+              <% end %>
+              Posição Líquida
+            </span>
+            <span class="detail-value"><%= @net_position > 0 ? '+' : '' %><%= @net_position %></span>
+          </div>
+          <div class="detail-item detail-item-expiration">
+            <span class="detail-label">
+              <i class="bi bi-calendar-event"></i>
+              Vencimento
+            </span>
+            <span class="detail-value"><%= @latest_trade.expiration_date.strftime('%d/%m/%Y') %></span>
           </div>
         </div>
       </div>
-
       <div class="notional-summary-card">
         <div class="notional-summary-header">
           <i class="bi bi-calculator"></i>
@@ -86,7 +94,6 @@
         </div>
       </div>
     <% end %>
-
     <% if @option_trades.any? %>
       <div class="related-trades-card">
         <h2 class="detail-section-title">
