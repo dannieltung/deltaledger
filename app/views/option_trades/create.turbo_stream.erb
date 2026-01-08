@@ -1,6 +1,6 @@
 <%= turbo_stream.prepend "option_trades_tbody", partial: "option_trades/option_trade_row", locals: { option_trade: @option_trade } %>
 <%= turbo_stream.update "option_trade_form" do %>
-  <%= simple_form_for OptionTrade.new, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form' } do |f| %>
+  <%= simple_form_for OptionTrade.new, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form', data: { controller: 'autofill-trade', autofill_trade_url_value: search_by_code_path } } do |f| %>
     <div class="trade-form-row">
       <div class="trade-form-group">
         <%= f.input :trade_date,
@@ -63,7 +63,8 @@
                     placeholder: 'Ex: PETRC50',
                     data: {
                       controller: 'option-code',
-                      action: 'input->option-code#input paste->option-code#paste'
+                      autofill_trade_target: 'optionCode',
+                      action: 'input->option-code#input input->autofill-trade#search paste->option-code#paste'
                     }
                   } %>
       </div>
@@ -78,6 +79,8 @@
                     placeholder: '0,00',
                     data: {
                       controller: 'currency-input',
+                      copy_values_target: 'strikeDestination',
+                      autofill_trade_target: 'strikePrice',
                       action: 'input->currency-input#input paste->currency-input#paste'
                     }
                   } %>
@@ -95,6 +98,7 @@
                     placeholder: '0,00',
                     data: {
                       controller: 'currency-input',
+                      copy_values_target: 'premiumDestination',
                       action: 'input->currency-input#input paste->currency-input#paste'
                     }
                   } %>
@@ -110,6 +114,7 @@
                     placeholder: 'DD/MM/AA',
                     data: {
                       controller: 'date-input',
+                      autofill_trade_target: 'expirationDate',
                       action: 'input->date-input#input paste->date-input#paste'
                     }
                   } %>
@@ -121,6 +126,7 @@
                   label_html: { class: 'trade-label' },
                   input_html: { class: 'trade-input', placeholder: 'Ex: PETR4', data: {
                     controller: 'option-code',
+                    autofill_trade_target: 'underlyingAsset',
                     action: 'input->option-code#input paste->option-code#paste'
                   } } %>
       </div>
