@@ -26,8 +26,10 @@ class OptionTradesController < ApplicationController
 
     # Calcula o preço médio ponderado do net_premium
     # Fórmula: Σ(net_premium * quantity) / Σ(quantity)
-    total_weighted = @option_trades.sum { |trade| trade.net_premium * trade.quantity }
-    total_quantity = @option_trades.sum(:quantity)
+    # Considera apenas vendas abertas (operation_type = 'sell' e close_date = nil)
+    open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
+    total_weighted = open_sells.sum { |trade| trade.net_premium * trade.quantity }
+    total_quantity = open_sells.sum(:quantity)
     @average_net_premium = total_quantity > 0 ? total_weighted / total_quantity : 0
 
     # Calcula a posição líquida: compras - vendas

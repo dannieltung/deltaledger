@@ -65,7 +65,7 @@ class OptionTrade < ApplicationRecord
 
   # Scope de ordenação customizada com suporte para múltiplos atributos
   scope :custom_sort, ->(sort_params) {
-    return order(trade_date: :desc) if sort_params.blank?
+    return order(updated_at: :desc) if sort_params.blank?
 
     # Atributos permitidos para ordenação
     allowed_attributes = %w[trade_date option_code expiration_date notional]
@@ -82,7 +82,7 @@ class OptionTrade < ApplicationRecord
     end
 
     # Se não houver cláusulas válidas, usa ordenação padrão
-    return order(trade_date: :desc) if order_clauses.empty?
+    return order(updated_at: :desc) if order_clauses.empty?
 
     # Aplica todas as cláusulas de ordenação
     order(Arel.sql(order_clauses.join(", ")))

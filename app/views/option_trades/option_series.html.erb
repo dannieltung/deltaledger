@@ -45,16 +45,12 @@
             <span class="detail-label">Strike</span>
             <span class="detail-value">R$ <%= number_to_currency(@latest_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">Total de Operações</span>
-            <span class="detail-value highlight"><%= @option_trades.count %></span>
-          </div>
-          <div class="detail-item detail-item-average">
+          <div class="detail-item detail-item-premium">
             <span class="detail-label">
               <i class="bi bi-graph-up-arrow"></i>
               Prêmio Médio
             </span>
-            <span class="detail-value">R$ <%= number_to_currency(@average_net_premium, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+            <span class="detail-value">R$ <%= number_to_currency((@average_net_premium * 1000).ceil / 1000.0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
           </div>
           <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
             <span class="detail-label">
@@ -67,6 +63,17 @@
             </span>
             <span class="detail-value"><%= @net_position > 0 ? '+' : '' %><%= @net_position %></span>
           </div>
+          <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
+            <span class="detail-label">
+              <% if @net_position < 0 %>
+                <i class="bi bi-arrow-down-circle"></i>
+              <% else %>
+                <i class="bi bi-arrow-up-circle"></i>
+              <% end %>
+              Notional Total
+            </span>
+            <span class="detail-value">R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+          </div>
           <div class="detail-item detail-item-expiration">
             <span class="detail-label">
               <i class="bi bi-calendar-event"></i>
@@ -76,20 +83,40 @@
           </div>
         </div>
       </div>
-      <div class="notional-summary-card">
-        <div class="notional-summary-header">
-          <i class="bi bi-calculator"></i>
-          <span class="notional-summary-title">Notional Total da Série</span>
-        </div>
-        <div class="notional-summary-content">
-          <div class="notional-summary-label">
-            Somatória de todas as operações <%= @option_code %>:
+
+      <%
+        # Calcula valores para a calculadora
+        open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
+        current_weighted_sum = open_sells.sum { |trade| trade.net_premium * trade.quantity }
+        current_quantity_sum = open_sells.sum(:quantity)
+      %>
+      <div class="trade-detail-card" data-controller="premium-calculator"
+           data-premium-calculator-weighted-value="<%= current_weighted_sum %>"
+           data-premium-calculator-quantity-value="<%= current_quantity_sum %>"
+           data-premium-calculator-net-position-value="<%= @net_position.abs %>">
+        <h2 class="detail-section-title">
+          <i class="bi bi-calculator-fill"></i>
+          Simulador de Prêmio Médio
+        </h2>
+        <div class="calculator-content">
+          <div class="calculator-description">
+            <i class="bi bi-info-circle"></i>
+            Simule o novo prêmio médio após zerar a posição líquida (<%= @net_position.abs %> contratos)
           </div>
-          <div class="notional-summary-value">
-            R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %>
-          </div>
-          <div class="notional-summary-count">
-            <%= @option_trades.count %> <%= @option_trades.count == 1 ? 'operação' : 'operações' %> no total
+          <div class="detail-grid calculator-grid">
+            <div class="calculator-input-wrapper">
+              <label class="detail-label">Prêmio de Fechamento</label>
+              <input
+                type="text"
+                class="calculator-input"
+                placeholder="0,00"
+                data-premium-calculator-target="premiumInput"
+                data-action="input->premium-calculator#calculate">
+            </div>
+            <div class="calculator-result-wrapper">
+              <span class="detail-label">Novo Prêmio Médio</span>
+              <span class="detail-value calculator-result" data-premium-calculator-target="result">R$ 0,00</span>
+            </div>
           </div>
         </div>
       </div>
