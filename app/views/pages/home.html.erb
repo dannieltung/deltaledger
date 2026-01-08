@@ -52,7 +52,7 @@
               Operação
             </h3>
             <div id="flash_messages"></div>
-            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form', data: { controller: 'autofill-trade', autofill_trade_url_value: search_by_code_path } } do |f| %>
+            <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form', data: { controller: 'autofill-trade input-validator', autofill_trade_url_value: search_by_code_path } } do |f| %>
               <div class="trade-form-row">
                 <div class="trade-form-group">
                   <%= f.input :trade_date,
@@ -101,7 +101,8 @@
                               placeholder: '100',
                               data: {
                                 controller: 'integer-input',
-                                action: 'input->integer-input#input paste->integer-input#paste'
+                                input_validator_target: 'input',
+                                action: 'input->integer-input#input input->input-validator#validate paste->integer-input#paste change->input-validator#validate'
                               }
                             } %>
                 </div>
@@ -116,7 +117,8 @@
                               data: {
                                 controller: 'option-code',
                                 autofill_trade_target: 'optionCode',
-                                action: 'input->option-code#input input->autofill-trade#search paste->option-code#paste'
+                                input_validator_target: 'input',
+                                action: 'input->option-code#input input->autofill-trade#search input->input-validator#validate paste->option-code#paste change->input-validator#validate'
                               }
                             } %>
                 </div>
@@ -132,7 +134,8 @@
                               data: {
                                 controller: 'date-input',
                                 autofill_trade_target: 'expirationDate',
-                                action: 'input->date-input#input paste->date-input#paste'
+                                input_validator_target: 'input',
+                                action: 'input->date-input#input input->input-validator#validate paste->date-input#paste change->input-validator#validate'
                               }
                             } %>
                 </div>
@@ -143,11 +146,16 @@
                             wrapper: false,
                             required: false,
                             label_html: { class: 'trade-label' },
-                            input_html: { class: 'trade-input', placeholder: 'Ex: PETR4', data: {
-                              controller: 'option-code',
-                              autofill_trade_target: 'underlyingAsset',
-                              action: 'input->option-code#input paste->option-code#paste'
-                            } } %>
+                            input_html: {
+                              class: 'trade-input',
+                              placeholder: 'Ex: PETR4',
+                              data: {
+                                controller: 'option-code',
+                                autofill_trade_target: 'underlyingAsset',
+                                input_validator_target: 'input',
+                                action: 'input->option-code#input input->input-validator#validate paste->option-code#paste change->input-validator#validate'
+                              }
+                            } %>
                 </div>
                 <div class="trade-form-group">
                   <%= f.input :strike_price,
@@ -162,7 +170,8 @@
                                 controller: 'currency-input',
                                 copy_values_target: 'strikeDestination',
                                 autofill_trade_target: 'strikePrice',
-                                action: 'input->currency-input#input paste->currency-input#paste'
+                                input_validator_target: 'input',
+                                action: 'input->currency-input#input input->input-validator#validate paste->currency-input#paste change->input-validator#validate'
                               }
                             } %>
                 </div>
@@ -178,7 +187,8 @@
                               data: {
                                 controller: 'currency-input',
                                 copy_values_target: 'premiumDestination',
-                                action: 'input->currency-input#input paste->currency-input#paste'
+                                input_validator_target: 'input',
+                                action: 'input->currency-input#input input->input-validator#validate paste->currency-input#paste change->input-validator#validate'
                               }
                             } %>
                 </div>

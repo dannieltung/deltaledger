@@ -1,11 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["premiumInput", "result"]
+  static targets = ["premiumInput", "result", "diffPercent"]
   static values = {
-    weighted: Number,    // Σ(net_premium * quantity) atual
-    quantity: Number,    // Σ(quantity) atual
-    netPosition: Number  // |@net_position|
+    weighted: Number,       // Σ(net_premium * quantity) atual
+    quantity: Number,       // Σ(quantity) atual
+    netPosition: Number,    // |@net_position|
+    currentAverage: Number  // Prêmio médio atual
   }
 
   connect() {
@@ -17,6 +18,7 @@ export default class extends Controller {
 
     if (inputValue === "" || inputValue === "0" || inputValue === "0,00") {
       this.resultTarget.textContent = "R$ 0,00"
+      this.diffPercentTarget.textContent = "0,00%"
       return
     }
 
@@ -25,6 +27,7 @@ export default class extends Controller {
 
     if (isNaN(premiumValue)) {
       this.resultTarget.textContent = "R$ 0,00"
+      this.diffPercentTarget.textContent = "0,00%"
       return
     }
 
@@ -42,6 +45,26 @@ export default class extends Controller {
 
     // Formata o resultado
     this.resultTarget.textContent = this.formatCurrency(roundedAverage)
+
+    // Calcula a diferença percentual
+    if (this.currentAverageValue > 0) {
+      const diffPercent = ((roundedAverage - this.currentAverageValue) / this.currentAverageValue) * 100
+      const sign = diffPercent > 0 ? '+' : ''
+      this.diffPercentTarget.textContent = `${sign}${diffPercent.toFixed(2).replace('.', ',')}%`
+
+      // Adiciona classe condicional baseado no sinal
+      if (diffPercent > 0) {
+        this.diffPercentTarget.parentElement.classList.remove('calculator-diff-negative')
+        this.diffPercentTarget.parentElement.classList.add('calculator-diff-positive')
+      } else if (diffPercent < 0) {
+        this.diffPercentTarget.parentElement.classList.remove('calculator-diff-positive')
+        this.diffPercentTarget.parentElement.classList.add('calculator-diff-negative')
+      } else {
+        this.diffPercentTarget.parentElement.classList.remove('calculator-diff-positive', 'calculator-diff-negative')
+      }
+    } else {
+      this.diffPercentTarget.textContent = "0,00%"
+    }
 
     // Formata o input enquanto o usuário digita
     this.formatInput()

@@ -47,18 +47,21 @@ export default class extends Controller {
           this.strikePriceTarget.value = this.formatCurrency(data.strike_price)
           // Dispara evento de input para aplicar formatação
           this.strikePriceTarget.dispatchEvent(new Event('input', { bubbles: true }))
+          this.strikePriceTarget.dispatchEvent(new Event('change', { bubbles: true }))
         }
 
         if (this.hasExpirationDateTarget) {
           this.expirationDateTarget.value = data.expiration_date
           // Dispara evento de input para aplicar formatação
           this.expirationDateTarget.dispatchEvent(new Event('input', { bubbles: true }))
+          this.expirationDateTarget.dispatchEvent(new Event('change', { bubbles: true }))
         }
 
         if (this.hasUnderlyingAssetTarget) {
           this.underlyingAssetTarget.value = data.underlying_asset
           // Dispara evento de input para aplicar formatação
           this.underlyingAssetTarget.dispatchEvent(new Event('input', { bubbles: true }))
+          this.underlyingAssetTarget.dispatchEvent(new Event('change', { bubbles: true }))
         }
       }
     } catch (error) {

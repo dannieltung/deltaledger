@@ -10,6 +10,7 @@ export default class extends Controller {
       this.strikeDestinationTarget.value = strikeValue
       // Trigger input event para formatar o valor
       this.strikeDestinationTarget.dispatchEvent(new Event('input', { bubbles: true }))
+      this.strikeDestinationTarget.dispatchEvent(new Event('change', { bubbles: true }))
     }
 
     // Copiar Premium para premium
@@ -18,6 +19,7 @@ export default class extends Controller {
       this.premiumDestinationTarget.value = premiumValue
       // Trigger input event para formatar o valor
       this.premiumDestinationTarget.dispatchEvent(new Event('input', { bubbles: true }))
+      this.premiumDestinationTarget.dispatchEvent(new Event('change', { bubbles: true }))
     }
   }
 }

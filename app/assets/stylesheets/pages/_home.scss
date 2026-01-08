@@ -114,6 +114,17 @@ $border-radius-lg: 16px;
       border-color: $primary-color;
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
+
+    &.input-filled {
+      border-color: #48bb78;
+      background: rgba(72, 187, 120, 0.05);
+      box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+
+      &:focus {
+        border-color: #48bb78;
+        box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+      }
+    }
   }
 
   select {

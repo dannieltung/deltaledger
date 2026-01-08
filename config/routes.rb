@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   # Option Trades
   get "option_trades/search_by_code", to: "option_trades#search_by_code", as: :search_by_code
   get "option_series/:option_code", to: "option_trades#option_series", as: :option_series
-  resources :option_trades, only: [:create, :show, :edit, :update, :destroy]
+  resources :option_trades, only: [:create, :show, :edit, :update, :destroy] do
+    collection do
+      post :create_series_trade
+    end
+  end
   get "portfolio", to: "option_trades#portfolio", as: :portfolio
 
   get "pages/home"

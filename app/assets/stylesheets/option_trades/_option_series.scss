@@ -1,6 +1,11 @@
 // Estilos específicos para option_series.html.erb
 @import 'shared';
 
+// Espaçamento entre informações da série e calculadora
+.calculator-card {
+  margin-top: $spacing-xl;
+}
+
 // Series info badge
 .series-info {
   display: inline-flex;
@@ -48,6 +53,94 @@
       color: #4a5568;
     }
   }
+}
+
+// Quick trade form styles
+.quick-trade-card {
+  margin-top: $spacing-xxl;
+}
+
+.quick-trade-form {
+  margin-top: $spacing-md;
+}
+
+.quick-trade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-lg;
+  align-items: end;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quick-trade-field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.quick-trade-input,
+.quick-trade-select {
+  padding: $spacing-md $spacing-lg;
+  border: 2px solid $border-color;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $text-dark;
+  background: $white;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  &::placeholder {
+    color: $text-light;
+    font-weight: 400;
+  }
+}
+
+.quick-trade-select {
+  cursor: pointer;
+}
+
+.quick-trade-submit {
+  display: flex;
+  align-items: flex-end;
+}
+
+.quick-trade-btn {
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  color: $white;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Espaçamento extra entre o card do calculador e a tabela
+.related-trades-card {
+  margin-top: $spacing-xxl;
 }
 
 // Tabela de operações relacionadas
@@ -233,10 +326,10 @@
 }
 
 .calculator-grid {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: $spacing-lg;
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
 }
@@ -273,16 +366,23 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-sm;
-  padding: $spacing-lg;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: $border-radius;
-  border: 2px solid rgba(102, 126, 234, 0.3);
-  justify-content: center;
 
   .calculator-result {
     font-size: 1.75rem;
     font-weight: 700;
     color: $primary-color;
+  }
+
+  &.calculator-diff-positive {
+    .calculator-result {
+      color: $success-color;
+    }
+  }
+
+  &.calculator-diff-negative {
+    .calculator-result {
+      color: $danger-color;
+    }
   }
 }
 
@@ -296,7 +396,9 @@
       padding: $spacing-sm;
     }
   }
+}
 
+@media (max-width: 992px) {
   .calculator-grid {
     grid-template-columns: 1fr;
   }

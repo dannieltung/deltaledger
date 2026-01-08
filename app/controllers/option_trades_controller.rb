@@ -1,7 +1,7 @@
 class OptionTradesController < ApplicationController
   before_action :authenticate_user!
-  before_action :parse_dates, only: [ :create, :update ]
-  before_action :parse_decimals, only: [ :create, :update ]
+  before_action :parse_dates, only: [ :create, :update, :create_series_trade ]
+  before_action :parse_decimals, only: [ :create, :update, :create_series_trade ]
 
   def portfolio
     parsed_filters = parse_filter_dates
@@ -19,7 +19,7 @@ class OptionTradesController < ApplicationController
     @option_code = params[:option_code]
     @option_trades = current_user.option_trades
                                   .where(option_code: @option_code)
-                                  .order(trade_date: :desc)
+                                  .order(created_at: :desc)
 
     # Calcula a somatória do notional de todas as instâncias com o mesmo option_code
     @total_notional = @option_trades.sum(:notional)
@@ -87,6 +87,41 @@ class OptionTradesController < ApplicationController
     else
       flash.now[:alert] = "Erro ao criar trade: #{@option_trade.errors.full_messages.join(', ')}"
       render "pages/home", status: :unprocessable_entity
+    end
+  end
+
+  def create_series_trade
+    @option_trade = current_user.option_trades.build(option_trade_params)
+
+    if @option_trade.save
+      # Recalcula os dados da série
+      @option_code = @option_trade.option_code
+      @option_trades = current_user.option_trades
+                                    .where(option_code: @option_code)
+                                    .order(created_at: :desc)
+
+      @total_notional = @option_trades.sum(:notional)
+
+      open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
+      total_weighted = open_sells.sum { |trade| trade.net_premium * trade.quantity }
+      total_quantity = open_sells.sum(:quantity)
+      @average_net_premium = total_quantity > 0 ? total_weighted / total_quantity : 0
+
+      buy_quantity = @option_trades.where(operation_type: 'buy').sum(:quantity)
+      sell_quantity = @option_trades.where(operation_type: 'sell').sum(:quantity)
+      @net_position = buy_quantity - sell_quantity
+
+      @latest_trade = @option_trades.first
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to option_series_option_trades_path(option_code: @option_code), notice: "Operação adicionada com sucesso!" }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("series_content", partial: "error", locals: { errors: @option_trade.errors.full_messages }) }
+        format.html { redirect_to option_series_option_trades_path(option_code: params[:option_trade][:option_code]), alert: "Erro ao criar trade: #{@option_trade.errors.full_messages.join(', ')}" }
+      end
     end
   end
 
