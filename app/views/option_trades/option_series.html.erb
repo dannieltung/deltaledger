@@ -31,7 +31,7 @@
             <span class="detail-value highlight"><%= @option_code %></span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">Ativo Subjacente</span>
+            <span class="detail-label">Ativo</span>
             <span class="detail-value"><%= @latest_trade.underlying_asset %></span>
           </div>
           <div class="detail-item">
@@ -52,6 +52,14 @@
               Vencimento
             </span>
             <span class="detail-value"><%= @latest_trade.expiration_date.strftime('%d/%m/%Y') %></span>
+          </div>
+          <div class="detail-item detail-item-average">
+            <span class="detail-label">
+              <i class="bi bi-graph-up-arrow"></i>
+              Prêmio Médio
+            </span>
+            <span class="detail-value">R$ <%= number_to_currency(@average_net_premium, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+            <%# <span class="detail-formula">Σ(net_premium × qty) ÷ Σ(qty)</span> %>
           </div>
           <div class="detail-item">
             <span class="detail-label">Total de Operações</span>

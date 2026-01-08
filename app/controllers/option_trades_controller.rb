@@ -24,6 +24,12 @@ class OptionTradesController < ApplicationController
     # Calcula a somatória do notional de todas as instâncias com o mesmo option_code
     @total_notional = @option_trades.sum(:notional)
 
+    # Calcula o preço médio ponderado do net_premium
+    # Fórmula: Σ(net_premium * quantity) / Σ(quantity)
+    total_weighted = @option_trades.sum { |trade| trade.net_premium * trade.quantity }
+    total_quantity = @option_trades.sum(:quantity)
+    @average_net_premium = total_quantity > 0 ? total_weighted / total_quantity : 0
+
     # Pega informações básicas da série (do trade mais recente)
     @latest_trade = @option_trades.first
   end
