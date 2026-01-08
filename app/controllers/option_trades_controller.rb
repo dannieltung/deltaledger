@@ -15,6 +15,19 @@ class OptionTradesController < ApplicationController
                                  .custom_sort(sort_params)
   end
 
+  def option_series
+    @option_code = params[:option_code]
+    @option_trades = current_user.option_trades
+                                  .where(option_code: @option_code)
+                                  .order(trade_date: :desc)
+
+    # Calcula a somatória do notional de todas as instâncias com o mesmo option_code
+    @total_notional = @option_trades.sum(:notional)
+
+    # Pega informações básicas da série (do trade mais recente)
+    @latest_trade = @option_trades.first
+  end
+
   def show
     @option_trade = current_user.option_trades.find(params[:id])
     @related_trades = current_user.option_trades
