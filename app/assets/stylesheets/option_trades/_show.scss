@@ -1,0 +1,254 @@
+// Estilos específicos para show.html.erb
+@import 'shared';
+
+// Notional summary card (se ainda for usado)
+.notional-summary-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-radius: $border-radius-lg;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+}
+
+.notional-summary-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+
+  i {
+    font-size: 1.5rem;
+    color: $primary-color;
+  }
+
+  .notional-summary-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text-dark;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.notional-summary-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.notional-summary-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $text-medium;
+  text-align: center;
+}
+
+.notional-summary-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: $primary-color;
+  text-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.notional-summary-count {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $text-light;
+  background: rgba(255, 255, 255, 0.8);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius;
+}
+
+// Estilos de tabela compartilhados com option_series
+.related-trades-wrapper {
+  overflow-x: auto;
+  border: 2px solid $border-color;
+  border-radius: $border-radius;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $primary-color;
+    border-radius: 4px;
+
+    &:hover {
+      background: $primary-dark;
+    }
+  }
+}
+
+.related-trades-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  thead {
+    background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+
+    tr th {
+      padding: $spacing-md;
+      text-align: center;
+      font-weight: 700;
+      color: $white;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: all 0.2s ease;
+      border-bottom: 1px solid $border-color;
+
+      &:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: $spacing-md;
+        text-align: center;
+        vertical-align: middle;
+        color: $text-dark;
+        white-space: nowrap;
+
+        &.trade-total {
+          font-weight: 700;
+          color: $primary-color;
+        }
+
+        &.trade-notional {
+          font-weight: 700;
+          color: $secondary-color;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+.view-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  color: $primary-color;
+  border-radius: $border-radius;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 1.1rem;
+  }
+
+  &:hover {
+    background: rgba(102, 126, 234, 0.2);
+    color: $primary-dark;
+    text-decoration: none;
+    transform: scale(1.1);
+  }
+}
+
+.edit-link-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  background: rgba(237, 137, 54, 0.1);
+  color: #c05621;
+  border-radius: $border-radius;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin-left: $spacing-sm;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background: rgba(237, 137, 54, 0.2);
+    color: #9c4221;
+    text-decoration: none;
+    transform: scale(1.1);
+  }
+}
+
+.empty-related {
+  padding: $spacing-xxl;
+  text-align: center;
+
+  i {
+    font-size: 3rem;
+    color: $text-light;
+    margin-bottom: $spacing-md;
+    display: block;
+  }
+
+  p {
+    color: $text-medium;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Responsividade específica
+@media (max-width: 768px) {
+  .notional-summary-card {
+    padding: $spacing-md;
+  }
+
+  .notional-summary-value {
+    font-size: 2rem;
+  }
+
+  .related-trades-table {
+    font-size: 0.75rem;
+
+    thead tr th,
+    tbody tr td {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .notional-summary-value {
+    font-size: 1.75rem;
+  }
+
+  .notional-summary-label {
+    font-size: 0.75rem;
+  }
+
+  .notional-summary-count {
+    font-size: 0.75rem;
+  }
+}

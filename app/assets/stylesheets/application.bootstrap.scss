@@ -10,7 +10,11 @@
 // Pages styles
 @import 'pages/home';
 @import 'pages/portfolio';
-@import 'pages/trade_detail';
+
+// Option Trades styles
+@import 'option_trades/show';
+@import 'option_trades/option_series';
+@import 'option_trades/edit';
 
 // Flash messages
 .flash-notice,
