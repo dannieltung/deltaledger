@@ -987,12 +987,17 @@ nav.pagination {
   gap: $spacing-sm;
   font-family: inherit;
 
-  .page,
-  .first,
-  .prev,
-  .next,
-  .last,
-  .gap {
+  // Estilos para todos os links de paginação
+  a.page,
+  a.first,
+  a.prev,
+  a.next,
+  a.last,
+  span.page,
+  span.first,
+  span.prev,
+  span.next,
+  span.last {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1008,6 +1013,7 @@ nav.pagination {
     transition: all 0.3s ease;
     text-decoration: none;
     cursor: pointer;
+    box-sizing: border-box;
 
     &:hover {
       border-color: $primary-color;
@@ -1015,28 +1021,40 @@ nav.pagination {
       transform: translateY(-2px);
       box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
     }
+  }
 
-    &.current {
-      background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
-      color: $white;
-      border-color: transparent;
-      cursor: default;
-      pointer-events: none;
+  // Página atual
+  a.page.current,
+  span.page.current {
+    background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+    color: $white;
+    border-color: transparent;
+    cursor: default;
+    pointer-events: none;
 
-      &:hover {
-        transform: none;
-        box-shadow: none;
-      }
-    }
-
-    &.disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      pointer-events: none;
+    &:hover {
+      transform: none;
+      box-shadow: none;
     }
   }
 
-  .gap {
+  // Links desabilitados
+  span.first,
+  span.prev,
+  span.next,
+  span.last {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Gap (...)
+  span.gap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
     border: none;
     background: transparent;
     cursor: default;
@@ -1048,28 +1066,20 @@ nav.pagination {
       box-shadow: none;
     }
   }
-
-  a {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 }
 
 @media (max-width: 576px) {
   nav.pagination {
-    .page,
-    .first,
-    .prev,
-    .next,
-    .last {
+    a.page,
+    a.first,
+    a.prev,
+    a.next,
+    a.last,
+    span.page,
+    span.first,
+    span.prev,
+    span.next,
+    span.last {
       min-width: 36px;
       height: 36px;
       padding: 0 $spacing-sm;

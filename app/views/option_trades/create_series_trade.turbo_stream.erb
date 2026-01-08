@@ -127,11 +127,14 @@
 
           <div class="quick-trade-field">
             <%= f.label :quantity, "Quantidade", class: "detail-label" %>
-            <%= f.number_field :quantity,
+            <%= f.text_field :quantity,
                 class: "quick-trade-input",
                 placeholder: "Ex: 100",
-                min: 1,
-                required: true %>
+                required: true,
+                data: {
+                  controller: 'integer-input',
+                  action: 'input->integer-input#input paste->integer-input#paste'
+                } %>
           </div>
 
           <div class="quick-trade-field">
@@ -139,7 +142,11 @@
             <%= f.text_field :premium,
                 class: "quick-trade-input",
                 placeholder: "0,00",
-                required: true %>
+                required: true,
+                data: {
+                  controller: 'currency-input',
+                  action: 'input->currency-input#input paste->currency-input#paste'
+                } %>
           </div>
 
           <div class="quick-trade-field quick-trade-submit">

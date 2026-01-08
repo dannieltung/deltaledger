@@ -125,7 +125,7 @@
         <div class="trade-detail-card quick-trade-card">
           <h2 class="detail-section-title">
             <i class="bi bi-plus-circle-fill"></i>
-            Adicionar Nova Operação
+            Adicionar Operação
           </h2>
           <%= form_with model: OptionTrade.new, url: create_series_trade_option_trades_path, method: :post, class: "quick-trade-form", data: { turbo_frame: "series_content" } do |f| %>
             <%= f.hidden_field :option_code, value: @option_code %>
@@ -146,11 +146,14 @@
 
               <div class="quick-trade-field">
                 <%= f.label :quantity, "Quantidade", class: "detail-label" %>
-                <%= f.number_field :quantity,
+                <%= f.text_field :quantity,
                     class: "quick-trade-input",
                     placeholder: "Ex: 100",
-                    min: 1,
-                    required: true %>
+                    required: true,
+                    data: {
+                      controller: 'integer-input',
+                      action: 'input->integer-input#input paste->integer-input#paste'
+                    } %>
               </div>
 
               <div class="quick-trade-field">
@@ -158,7 +161,11 @@
                 <%= f.text_field :premium,
                     class: "quick-trade-input",
                     placeholder: "0,00",
-                    required: true %>
+                    required: true,
+                    data: {
+                      controller: 'currency-input',
+                      action: 'input->currency-input#input paste->currency-input#paste'
+                    } %>
               </div>
 
               <div class="quick-trade-field quick-trade-submit">
@@ -187,7 +194,6 @@
                   <th>Total</th>
                   <th>Notional</th>
                   <th>Vencimento</th>
-                  <th>Status</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -213,19 +219,6 @@
                     <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
                     <td class="trade-notional">R$ <%= number_to_currency(trade.notional || (trade.strike_price * trade.quantity), unit: '', precision: 2, separator: ',') %></td>
                     <td><%= trade.expiration_date.strftime('%d/%m/%y') %></td>
-                    <td>
-                      <% if trade.close_date.present? %>
-                        <span class="status-badge closed">
-                          <i class="bi bi-check-circle"></i>
-                          Fechada
-                        </span>
-                      <% else %>
-                        <span class="status-badge open">
-                          <i class="bi bi-circle"></i>
-                          Aberta
-                        </span>
-                      <% end %>
-                    </td>
                     <td>
                       <%= link_to option_trade_path(trade), class: "view-link" do %>
                         <i class="bi bi-eye"></i>
