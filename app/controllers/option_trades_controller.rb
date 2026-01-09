@@ -16,43 +16,7 @@ class OptionTradesController < ApplicationController
   end
 
   def option_series
-    @option_code = params[:option_code]
-    @option_trades = current_user.option_trades
-                                  .where(option_code: @option_code)
-                                  .order(created_at: :desc)
-
-    # Calcula o notional líquido: compras - vendas
-    buy_notional = @option_trades.where(operation_type: 'buy').sum(:notional)
-    sell_notional = @option_trades.where(operation_type: 'sell').sum(:notional)
-    @total_notional = buy_notional - sell_notional
-
-    # Calcula o preço médio ponderado do net_premium
-    # Fórmula: Σ(net_premium * quantity) / Σ(quantity)
-    # Considera apenas vendas abertas (operation_type = 'sell' e close_date = nil)
-    open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
-    total_weighted = open_sells.sum { |trade| trade.net_premium * trade.quantity }
-    total_quantity = open_sells.sum(:quantity)
-    @average_net_premium = total_quantity > 0 ? total_weighted / total_quantity : 0
-
-    # Calcula a posição líquida: compras - vendas
-    buy_quantity = @option_trades.where(operation_type: 'buy').sum(:quantity)
-    sell_quantity = @option_trades.where(operation_type: 'sell').sum(:quantity)
-    @net_position = buy_quantity - sell_quantity
-
-    # Pega informações básicas da série (do trade mais recente)
-    @latest_trade = @option_trades.first
-
-    # Pega o trade aberto mais antigo da série
-    @oldest_open_trade = @option_trades.open.reorder(created_at: :asc).first
-
-    # Calcula a somatória de trade-total
-    sell_total = @option_trades.where(operation_type: 'sell').sum { |trade| trade.net_premium * trade.quantity }
-    buy_total = @option_trades.where(operation_type: 'buy').sum { |trade| trade.net_premium * trade.quantity }
-    @trade_total_sum = if @oldest_open_trade&.operation_type == 'sell'
-                         sell_total - buy_total
-                       else
-                         buy_total - sell_total
-                       end
+    assign_series_data(params[:option_code])
   end
 
   def show
@@ -108,36 +72,7 @@ class OptionTradesController < ApplicationController
     @option_trade = current_user.option_trades.build(option_trade_params)
 
     if @option_trade.save
-      # Recalcula os dados da série
-      @option_code = @option_trade.option_code
-      @option_trades = current_user.option_trades
-                                    .where(option_code: @option_code)
-                                    .order(created_at: :desc)
-
-      buy_notional = @option_trades.where(operation_type: 'buy').sum(:notional)
-      sell_notional = @option_trades.where(operation_type: 'sell').sum(:notional)
-      @total_notional = buy_notional - sell_notional
-
-      open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
-      total_weighted = open_sells.sum { |trade| trade.net_premium * trade.quantity }
-      total_quantity = open_sells.sum(:quantity)
-      @average_net_premium = total_quantity > 0 ? total_weighted / total_quantity : 0
-
-      buy_quantity = @option_trades.where(operation_type: 'buy').sum(:quantity)
-      sell_quantity = @option_trades.where(operation_type: 'sell').sum(:quantity)
-      @net_position = buy_quantity - sell_quantity
-
-      @latest_trade = @option_trades.first
-      @oldest_open_trade = @option_trades.open.reorder(created_at: :asc).first
-
-      # Calcula a somatória de trade-total
-      sell_total = @option_trades.where(operation_type: 'sell').sum { |trade| trade.net_premium * trade.quantity }
-      buy_total = @option_trades.where(operation_type: 'buy').sum { |trade| trade.net_premium * trade.quantity }
-      @trade_total_sum = if @oldest_open_trade&.operation_type == 'sell'
-                           sell_total - buy_total
-                         else
-                           buy_total - sell_total
-                         end
+      assign_series_data(@option_trade.option_code)
 
       respond_to do |format|
         format.turbo_stream
@@ -177,6 +112,19 @@ class OptionTradesController < ApplicationController
   end
 
   private
+
+  def assign_series_data(option_code)
+    result = OptionSeriesCalculator.new(current_user, option_code).calculate
+
+    @option_code = result[:option_code]
+    @option_trades = result[:option_trades]
+    @total_notional = result[:total_notional]
+    @average_net_premium = result[:average_net_premium]
+    @net_position = result[:net_position]
+    @latest_trade = result[:latest_trade]
+    @oldest_open_trade = result[:oldest_open_trade]
+    @trade_total_sum = result[:trade_total_sum]
+  end
 
   def parse_dates
     date_fields = [ :trade_date, :expiration_date, :close_date ]
