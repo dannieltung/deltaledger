@@ -755,6 +755,7 @@ $border-radius-lg: 16px;
   border-collapse: collapse;
   background: $white;
   font-size: 0.875rem;
+  table-layout: fixed;
 
   thead {
     background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
@@ -774,6 +775,19 @@ $border-radius-lg: 16px;
         letter-spacing: 0.5px;
         white-space: nowrap;
         border-bottom: 2px solid $white;
+
+        // Larguras fixas para cada coluna (11 colunas)
+        &:nth-child(1) { width: 8%; }   // Data
+        &:nth-child(2) { width: 8%; }   // Operação
+        &:nth-child(3) { width: 10%; }  // Código
+        &:nth-child(4) { width: 6%; }   // Tipo
+        &:nth-child(5) { width: 6%; }   // Qtd
+        &:nth-child(6) { width: 10%; }  // Strike
+        &:nth-child(7) { width: 10%; }  // Prêmio
+        &:nth-child(8) { width: 8%; }   // Yield
+        &:nth-child(9) { width: 12%; }  // Total
+        &:nth-child(10) { width: 10%; } // Vencimento
+        &:nth-child(11) { width: 12%; } // Notional
       }
     }
   }
@@ -815,6 +829,7 @@ $border-radius-lg: 16px;
         vertical-align: middle;
         color: $text-dark;
         white-space: nowrap;
+        overflow: hidden;
 
         &.trade-code {
           font-weight: 700;
@@ -841,6 +856,15 @@ $border-radius-lg: 16px;
           font-weight: 700;
           color: $secondary-color;
           font-size: 0.9rem;
+        }
+
+        // Colunas Operação (2ª) e Tipo (4ª) com badges menores
+        &:nth-child(2),
+        &:nth-child(4) {
+          .trade-badge {
+            padding: 3px 6px;
+            font-size: 0.6rem;
+          }
         }
       }
     }
