@@ -44,6 +44,15 @@ class OptionTradesController < ApplicationController
 
     # Pega o trade aberto mais antigo da série
     @oldest_open_trade = @option_trades.open.reorder(created_at: :asc).first
+
+    # Calcula a somatória de trade-total
+    sell_total = @option_trades.where(operation_type: 'sell').sum { |trade| trade.net_premium * trade.quantity }
+    buy_total = @option_trades.where(operation_type: 'buy').sum { |trade| trade.net_premium * trade.quantity }
+    @trade_total_sum = if @oldest_open_trade&.operation_type == 'sell'
+                         sell_total - buy_total
+                       else
+                         buy_total - sell_total
+                       end
   end
 
   def show
@@ -120,6 +129,15 @@ class OptionTradesController < ApplicationController
 
       @latest_trade = @option_trades.first
       @oldest_open_trade = @option_trades.open.reorder(created_at: :asc).first
+
+      # Calcula a somatória de trade-total
+      sell_total = @option_trades.where(operation_type: 'sell').sum { |trade| trade.net_premium * trade.quantity }
+      buy_total = @option_trades.where(operation_type: 'buy').sum { |trade| trade.net_premium * trade.quantity }
+      @trade_total_sum = if @oldest_open_trade&.operation_type == 'sell'
+                           sell_total - buy_total
+                         else
+                           buy_total - sell_total
+                         end
 
       respond_to do |format|
         format.turbo_stream

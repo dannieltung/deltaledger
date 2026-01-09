@@ -33,6 +33,17 @@
           </span>
           <span class="detail-value">R$ <%= number_to_currency((@average_net_premium * 1000).ceil / 1000.0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
         </div>
+        <div class="detail-item <%= @trade_total_sum < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
+          <span class="detail-label">
+            <% if @trade_total_sum < 0 %>
+              <i class="bi bi-arrow-down-circle"></i>
+            <% else %>
+              <i class="bi bi-arrow-up-circle"></i>
+            <% end %>
+            Prêmio Acumulado
+          </span>
+          <span class="detail-value">R$ <%= number_to_currency(@trade_total_sum.abs, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+        </div>
         <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
           <span class="detail-label">
             <% if @net_position < 0 %>
