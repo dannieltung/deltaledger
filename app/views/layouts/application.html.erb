@@ -20,38 +20,21 @@
   <body>
     <%= render 'shared/navbar' %>
 
-    <% if flash[:notice] %>
-      <div class="flash-notice">
-        <%= flash[:notice] %>
-        <button class="flash-close" onclick="this.parentElement.remove()">×</button>
-      </div>
-    <% end %>
-    <% if flash[:alert] %>
-      <div class="flash-alert">
-        <%= flash[:alert] %>
-        <button class="flash-close" onclick="this.parentElement.remove()">×</button>
-      </div>
-    <% end %>
+    <div id="flash_container">
+      <% if flash[:notice] %>
+        <div class="flash-notice" data-controller="flash">
+          <%= flash[:notice] %>
+          <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="flash-alert" data-controller="flash">
+          <%= flash[:alert] %>
+          <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+      <% end %>
+    </div>
     <%= yield %>
 
-    <script>
-      // Auto-remove flash messages after 2 seconds
-      document.addEventListener('turbo:load', function() {
-        const flashMessages = document.querySelectorAll('.flash-notice, .flash-alert');
-        flashMessages.forEach(function(flash) {
-          setTimeout(function() {
-            if (flash && flash.parentElement) {
-              flash.style.opacity = '0';
-              flash.style.transform = 'translateX(100%)';
-              setTimeout(function() {
-                if (flash && flash.parentElement) {
-                  flash.remove();
-                }
-              }, 300);
-            }
-          }, 2000);
-        });
-      });
-    </script>
   </body>
 </html>

@@ -51,7 +51,6 @@
               <i class="bi bi-plus-circle"></i>
               Operação
             </h3>
-            <div id="flash_messages"></div>
             <%= simple_form_for @option_trade, url: option_trades_path, html: { class: 'trade-form', id: 'option_trade_form', data: { controller: 'autofill-trade input-validator', autofill_trade_url_value: search_by_code_path } } do |f| %>
               <div class="trade-form-row">
                 <div class="trade-form-group">

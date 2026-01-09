@@ -42,7 +42,7 @@
                 </span>
               </span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item detail-item-strike">
               <span class="detail-label">Strike</span>
               <span class="detail-value">R$ <%= number_to_currency(@latest_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
             </div>
@@ -51,7 +51,8 @@
                 <i class="bi bi-graph-up-arrow"></i>
                 Prêmio Médio
               </span>
-              <span class="detail-value">R$ <%= number_to_currency((@average_net_premium * 1000).ceil / 1000.0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+              <% average_premium_yield = @latest_trade.strike_price > 0 ? (@average_net_premium / @latest_trade.strike_price) * 100 : 0 %>
+              <span class="detail-value">R$ <%= number_to_currency((@average_net_premium * 1000).ceil / 1000.0, unit: '', precision: 2, separator: ',', delimiter: '.') %> (<%= number_with_precision(average_premium_yield, precision: 2, separator: ',') %>%)</span>
             </div>
             <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
               <span class="detail-label">
@@ -64,16 +65,16 @@
               </span>
               <span class="detail-value"><%= @net_position > 0 ? '+' : '' %><%= @net_position %></span>
             </div>
-            <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
+            <div class="detail-item <%= @total_notional < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
               <span class="detail-label">
-                <% if @net_position < 0 %>
+                <% if @total_notional < 0 %>
                   <i class="bi bi-arrow-down-circle"></i>
                 <% else %>
                   <i class="bi bi-arrow-up-circle"></i>
                 <% end %>
                 Notional Total
               </span>
-              <span class="detail-value">R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+              <span class="detail-value">R$ <%= number_to_currency(@total_notional.abs, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
             </div>
             <div class="detail-item detail-item-expiration">
               <span class="detail-label">
@@ -172,6 +173,7 @@
             </div>
           <% end %>
           <% if @option_trades.any? %>
+            <%= @oldest_open_trade.id %>
             <div class="related-trades-card">
               <h2 class="detail-section-title">
                 <i class="bi bi-list-ul"></i>

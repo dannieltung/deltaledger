@@ -63,6 +63,9 @@ class OptionTrade < ApplicationRecord
     end
   }
 
+  # Scope para trades abertos (sem data de fechamento)
+  scope :open, -> { where(close_date: nil) }
+
   # Scope de ordenação customizada com suporte para múltiplos atributos
   scope :custom_sort, ->(sort_params) {
     return order(updated_at: :desc) if sort_params.blank?

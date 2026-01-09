@@ -21,8 +21,10 @@ class OptionTradesController < ApplicationController
                                   .where(option_code: @option_code)
                                   .order(created_at: :desc)
 
-    # Calcula a somatória do notional de todas as instâncias com o mesmo option_code
-    @total_notional = @option_trades.sum(:notional)
+    # Calcula o notional líquido: compras - vendas
+    buy_notional = @option_trades.where(operation_type: 'buy').sum(:notional)
+    sell_notional = @option_trades.where(operation_type: 'sell').sum(:notional)
+    @total_notional = buy_notional - sell_notional
 
     # Calcula o preço médio ponderado do net_premium
     # Fórmula: Σ(net_premium * quantity) / Σ(quantity)
@@ -39,6 +41,9 @@ class OptionTradesController < ApplicationController
 
     # Pega informações básicas da série (do trade mais recente)
     @latest_trade = @option_trades.first
+
+    # Pega o trade aberto mais antigo da série
+    @oldest_open_trade = @option_trades.open.reorder(created_at: :asc).first
   end
 
   def show
@@ -100,7 +105,9 @@ class OptionTradesController < ApplicationController
                                     .where(option_code: @option_code)
                                     .order(created_at: :desc)
 
-      @total_notional = @option_trades.sum(:notional)
+      buy_notional = @option_trades.where(operation_type: 'buy').sum(:notional)
+      sell_notional = @option_trades.where(operation_type: 'sell').sum(:notional)
+      @total_notional = buy_notional - sell_notional
 
       open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
       total_weighted = open_sells.sum { |trade| trade.net_premium * trade.quantity }
