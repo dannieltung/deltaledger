@@ -205,7 +205,7 @@
                   </thead>
                   <tbody>
                     <% @option_trades.each do |trade| %>
-                      <tr class="<%= trade.close_date.present? ? 'closed-trade' : '' %>">
+                      <tr>
                         <td><%= trade.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%y %H:%M') %></td>
                         <td>
                           <span class="trade-badge <%= trade.operation_type %>">
