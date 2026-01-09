@@ -189,7 +189,7 @@
                       <th>Prêmio</th>
                       <th>Yield</th>
                       <th>Total</th>
-                      <th>Notional</th>
+                      <th>P&L</th>
                       <th>Ações</th>
                     </tr>
                   </thead>
@@ -212,7 +212,7 @@
                           <% end %>
                         </td>
                         <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
-                        <td class="trade-notional">R$ <%= number_to_currency(trade.notional || (trade.strike_price * trade.quantity), unit: '', precision: 2, separator: ',') %></td>
+                        <td>***HERE***</td>
                         <td>
                           <%= link_to option_trade_path(trade), class: "view-link" do %>
                             <i class="bi bi-eye"></i>
