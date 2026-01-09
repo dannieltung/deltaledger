@@ -39,6 +39,19 @@ $border-radius-lg: 16px;
   text-align: center;
 }
 
+// Calculadora de Yield
+.calculator-form-container {
+  .trade-form .trade-form-row {
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: end;
+
+    .trade-form-group:last-child {
+      align-self: end;
+      padding-bottom: 2px;
+    }
+  }
+}
+
 // Formulário de Trade
 .trade-form-container {
   margin-top: $spacing-xxl;
@@ -905,6 +918,17 @@ $border-radius-lg: 16px;
 @media (max-width: 576px) {
   .home-card {
     padding: $spacing-xl $spacing-lg;
+  }
+
+  .calculator-form-container {
+    .trade-form .trade-form-row {
+      grid-template-columns: 1fr;
+
+      .trade-form-group:last-child {
+        justify-self: center;
+        margin-top: $spacing-sm;
+      }
+    }
   }
 
   .trade-form {
