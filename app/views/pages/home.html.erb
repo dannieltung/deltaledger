@@ -201,16 +201,15 @@
         <% end %>
         <div class="trades-list-container">
           <div class="search-container">
-            <%= form_with(url: root_path, method: :get, class: "search-form", data: { turbo: false }) do |f| %>
+            <%= form_with(url: root_path, method: :get, class: "search-form", data: { controller: "search", turbo_frame: "trades_list" }) do |f| %>
               <div class="search-wrapper">
                 <%= f.text_field :q,
                     value: params[:q],
                     placeholder: "Buscar por ativo ou código da opção...",
-                    class: "search-input" %>
+                    class: "search-input",
+                    data: { search_target: "input", action: "input->search#input" } %>
                 <%= f.submit "Buscar", class: "search-btn" %>
-                <% if params[:q].present? %>
-                  <%= link_to "Limpar", root_path, class: "clear-btn" %>
-                <% end %>
+                <button type="button" class="clear-btn" data-search-target="clearBtn" data-action="click->search#clear" style="<%= 'display: none;' unless params[:q].present? %>">Limpar</button>
               </div>
             <% end %>
           </div>
@@ -233,7 +232,7 @@
                 <% end %>
               </button>
               <div class="filter-content" data-sort-target="content">
-                <%= form_with(url: root_path, method: :get, class: "filter-form", data: { turbo: false }) do |f| %>
+                <%= form_with(url: root_path, method: :get, class: "filter-form", data: { turbo_frame: "trades_list" }) do |f| %>
                   <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
                   <% params[:sort]&.each do |key, value| %>
                     <%= hidden_field_tag "sort[#{key}]", value %>
@@ -310,7 +309,7 @@
                   <div class="filter-actions">
                     <%= f.submit "Aplicar", class: "search-btn" %>
                     <% if active_filters > 0 %>
-                      <%= link_to "Limpar", root_path(q: params[:q], sort: params[:sort]&.to_unsafe_h), class: "clear-btn" %>
+                      <%= link_to "Limpar", root_path(q: params[:q], sort: params[:sort]&.to_unsafe_h), class: "clear-btn", data: { turbo_frame: "trades_list" } %>
                     <% end %>
                   </div>
                 <% end %>
@@ -326,7 +325,7 @@
                 <% end %>
               </button>
               <div class="sort-content" data-sort-target="content">
-                <%= form_with(url: root_path, method: :get, class: "sort-form", data: { turbo: false }) do |f| %>
+                <%= form_with(url: root_path, method: :get, class: "sort-form", data: { turbo_frame: "trades_list" }) do |f| %>
                   <%= f.hidden_field :q, value: params[:q] if params[:q].present? %>
                   <% params[:filter]&.each do |key, value| %>
                     <%= hidden_field_tag "filter[#{key}]", value %>
@@ -392,7 +391,7 @@
                   <div class="sort-actions">
                     <%= f.submit "Aplicar", class: "search-btn" %>
                     <% if params[:sort].present? %>
-                      <%= link_to "Limpar", root_path(q: params[:q], filter: params[:filter]&.to_unsafe_h), class: "clear-btn" %>
+                      <%= link_to "Limpar", root_path(q: params[:q], filter: params[:filter]&.to_unsafe_h), class: "clear-btn", data: { turbo_frame: "trades_list" } %>
                     <% end %>
                   </div>
                 <% end %>
