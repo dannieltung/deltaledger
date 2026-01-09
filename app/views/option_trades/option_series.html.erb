@@ -19,134 +19,132 @@
   </div>
   <div class="trade-detail-main">
     <%= turbo_frame_tag "series_content" do %>
-    <% if @latest_trade %>
-      <div class="trade-detail-card">
-        <h2 class="detail-section-title">
-          <i class="bi bi-info-circle"></i>
-          Informações da Série
-        </h2>
-        <div class="detail-grid">
-          <div class="detail-item">
-            <span class="detail-label">Código da Opção</span>
-            <span class="detail-value highlight"><%= @option_code %></span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Ativo</span>
-            <span class="detail-value"><%= @latest_trade.underlying_asset %></span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Tipo</span>
-            <span class="detail-value">
-              <span class="trade-badge <%= @latest_trade.option_type %>">
-                <%= @latest_trade.option_type.upcase %>
+      <% if @latest_trade %>
+        <div class="trade-detail-card">
+          <h2 class="detail-section-title">
+            <i class="bi bi-info-circle"></i>
+            Informações da Série
+          </h2>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Código da Opção</span>
+              <span class="detail-value highlight"><%= @option_code %></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ativo</span>
+              <span class="detail-value"><%= @latest_trade.underlying_asset %></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tipo</span>
+              <span class="detail-value">
+                <span class="trade-badge <%= @latest_trade.option_type %>">
+                  <%= @latest_trade.option_type.upcase %>
+                </span>
               </span>
-            </span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Strike</span>
-            <span class="detail-value">R$ <%= number_to_currency(@latest_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
-          </div>
-          <div class="detail-item detail-item-premium">
-            <span class="detail-label">
-              <i class="bi bi-graph-up-arrow"></i>
-              Prêmio Médio
-            </span>
-            <span class="detail-value">R$ <%= number_to_currency((@average_net_premium * 1000).ceil / 1000.0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
-          </div>
-          <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
-            <span class="detail-label">
-              <% if @net_position < 0 %>
-                <i class="bi bi-arrow-down-circle"></i>
-              <% else %>
-                <i class="bi bi-arrow-up-circle"></i>
-              <% end %>
-              Posição Líquida
-            </span>
-            <span class="detail-value"><%= @net_position > 0 ? '+' : '' %><%= @net_position %></span>
-          </div>
-          <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
-            <span class="detail-label">
-              <% if @net_position < 0 %>
-                <i class="bi bi-arrow-down-circle"></i>
-              <% else %>
-                <i class="bi bi-arrow-up-circle"></i>
-              <% end %>
-              Notional Total
-            </span>
-            <span class="detail-value">R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
-          </div>
-          <div class="detail-item detail-item-expiration">
-            <span class="detail-label">
-              <i class="bi bi-calendar-event"></i>
-              Vencimento
-            </span>
-            <span class="detail-value"><%= @latest_trade.expiration_date.strftime('%d/%m/%Y') %></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Strike</span>
+              <span class="detail-value">R$ <%= number_to_currency(@latest_trade.strike_price, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+            </div>
+            <div class="detail-item detail-item-premium">
+              <span class="detail-label">
+                <i class="bi bi-graph-up-arrow"></i>
+                Prêmio Médio
+              </span>
+              <span class="detail-value">R$ <%= number_to_currency((@average_net_premium * 1000).ceil / 1000.0, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+            </div>
+            <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
+              <span class="detail-label">
+                <% if @net_position < 0 %>
+                  <i class="bi bi-arrow-down-circle"></i>
+                <% else %>
+                  <i class="bi bi-arrow-up-circle"></i>
+                <% end %>
+                Posição Líquida
+              </span>
+              <span class="detail-value"><%= @net_position > 0 ? '+' : '' %><%= @net_position %></span>
+            </div>
+            <div class="detail-item <%= @net_position < 0 ? 'detail-item-negative' : 'detail-item-positive' %>">
+              <span class="detail-label">
+                <% if @net_position < 0 %>
+                  <i class="bi bi-arrow-down-circle"></i>
+                <% else %>
+                  <i class="bi bi-arrow-up-circle"></i>
+                <% end %>
+                Notional Total
+              </span>
+              <span class="detail-value">R$ <%= number_to_currency(@total_notional, unit: '', precision: 2, separator: ',', delimiter: '.') %></span>
+            </div>
+            <div class="detail-item detail-item-expiration">
+              <span class="detail-label">
+                <i class="bi bi-calendar-event"></i>
+                Vencimento
+              </span>
+              <span class="detail-value"><%= @latest_trade.expiration_date.strftime('%d/%m/%Y') %></span>
+            </div>
           </div>
         </div>
-      </div>
-      <%
+        <%
         # Calcula valores para a calculadora
         open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
         current_weighted_sum = open_sells.sum { |trade| trade.net_premium * trade.quantity }
         current_quantity_sum = open_sells.sum(:quantity)
       %>
-      <div class="trade-detail-card calculator-card" data-controller="premium-calculator"
+        <div class="trade-detail-card calculator-card" data-controller="premium-calculator"
            data-premium-calculator-weighted-value="<%= current_weighted_sum %>"
            data-premium-calculator-quantity-value="<%= current_quantity_sum %>"
            data-premium-calculator-net-position-value="<%= @net_position.abs %>"
            data-premium-calculator-current-average-value="<%= @average_net_premium %>">
-        <h2 class="detail-section-title">
-          <i class="bi bi-calculator-fill"></i>
-          Simulador de Prêmio Médio
-        </h2>
-        <div class="calculator-content">
-          <div class="detail-grid calculator-grid">
-            <div class="calculator-input-wrapper">
-              <label class="detail-label">Prêmio de Fechamento</label>
-              <input
+          <h2 class="detail-section-title">
+            <i class="bi bi-calculator-fill"></i>
+            Simulador de Prêmio Médio
+          </h2>
+          <div class="calculator-content">
+            <div class="detail-grid calculator-grid">
+              <div class="calculator-input-wrapper">
+                <label class="detail-label">Prêmio de Fechamento</label>
+                <input
                 type="text"
                 class="calculator-input"
                 placeholder="0,00"
                 data-premium-calculator-target="premiumInput"
                 data-action="input->premium-calculator#calculate">
+                </div>
+                <div class="calculator-result-wrapper">
+                  <span class="detail-label">Novo Prêmio Médio</span>
+                  <span class="detail-value calculator-result" data-premium-calculator-target="result">R$ 0,00</span>
+                </div>
+                <div class="calculator-result-wrapper calculator-diff-wrapper">
+                  <span class="detail-label">Diferença</span>
+                  <span class="detail-value calculator-result" data-premium-calculator-target="diffPercent">0,00%</span>
+                </div>
+              </div>
             </div>
-            <div class="calculator-result-wrapper">
-              <span class="detail-label">Novo Prêmio Médio</span>
-              <span class="detail-value calculator-result" data-premium-calculator-target="result">R$ 0,00</span>
-            </div>
-            <div class="calculator-result-wrapper calculator-diff-wrapper">
-              <span class="detail-label">Diferença</span>
-              <span class="detail-value calculator-result" data-premium-calculator-target="diffPercent">0,00%</span>
-            </div>
-          </div>
-        </div>
-      <% end %>
-      <% if @latest_trade %>
-        <div class="trade-detail-card quick-trade-card">
-          <h2 class="detail-section-title">
-            <i class="bi bi-plus-circle-fill"></i>
-            Adicionar Operação
-          </h2>
-          <%= form_with model: OptionTrade.new, url: create_series_trade_option_trades_path, method: :post, class: "quick-trade-form", data: { turbo_frame: "series_content" } do |f| %>
-            <%= f.hidden_field :option_code, value: @option_code %>
-            <%= f.hidden_field :option_type, value: @latest_trade.option_type %>
-            <%= f.hidden_field :underlying_asset, value: @latest_trade.underlying_asset %>
-            <%= f.hidden_field :strike_price, value: @latest_trade.strike_price %>
-            <%= f.hidden_field :expiration_date, value: @latest_trade.expiration_date.strftime('%d/%m/%y') %>
-            <%= f.hidden_field :trade_date, value: Date.today.strftime('%d/%m/%y') %>
-
-            <div class="quick-trade-grid">
-              <div class="quick-trade-field">
-                <%= f.label :operation_type, "Tipo de Operação", class: "detail-label" %>
-                <%= f.select :operation_type,
+          <% end %>
+          <% if @latest_trade %>
+            <div class="trade-detail-card quick-trade-card">
+              <h2 class="detail-section-title">
+                <i class="bi bi-plus-circle-fill"></i>
+                Adicionar Operação
+              </h2>
+              <%= form_with model: OptionTrade.new, url: create_series_trade_option_trades_path, method: :post, class: "quick-trade-form", data: { turbo_frame: "series_content" } do |f| %>
+                <%= f.hidden_field :option_code, value: @option_code %>
+                <%= f.hidden_field :option_type, value: @latest_trade.option_type %>
+                <%= f.hidden_field :underlying_asset, value: @latest_trade.underlying_asset %>
+                <%= f.hidden_field :strike_price, value: @latest_trade.strike_price %>
+                <%= f.hidden_field :expiration_date, value: @latest_trade.expiration_date.strftime('%d/%m/%y') %>
+                <%= f.hidden_field :trade_date, value: Date.today.strftime('%d/%m/%y') %>
+                <div class="quick-trade-grid">
+                  <div class="quick-trade-field">
+                    <%= f.label :operation_type, "Tipo de Operação", class: "detail-label" %>
+                    <%= f.select :operation_type,
                     options_for_select([['Compra', 'buy'], ['Venda', 'sell']], 'sell'),
                     {},
                     class: "quick-trade-select" %>
-              </div>
-
-              <div class="quick-trade-field">
-                <%= f.label :quantity, "Quantidade", class: "detail-label" %>
-                <%= f.text_field :quantity,
+                  </div>
+                  <div class="quick-trade-field">
+                    <%= f.label :quantity, "Quantidade", class: "detail-label" %>
+                    <%= f.text_field :quantity,
                     class: "quick-trade-input",
                     placeholder: "Ex: 100",
                     required: true,
@@ -154,11 +152,10 @@
                       controller: 'integer-input',
                       action: 'input->integer-input#input paste->integer-input#paste'
                     } %>
-              </div>
-
-              <div class="quick-trade-field">
-                <%= f.label :premium, "Prêmio (R$)", class: "detail-label" %>
-                <%= f.text_field :premium,
+                  </div>
+                  <div class="quick-trade-field">
+                    <%= f.label :premium, "Prêmio (R$)", class: "detail-label" %>
+                    <%= f.text_field :premium,
                     class: "quick-trade-input",
                     placeholder: "0,00",
                     required: true,
@@ -166,81 +163,76 @@
                       controller: 'currency-input',
                       action: 'input->currency-input#input paste->currency-input#paste'
                     } %>
+                  </div>
+                  <div class="quick-trade-field quick-trade-submit">
+                    <%= f.submit "Adicionar Operação", class: "quick-trade-btn" %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <% if @option_trades.any? %>
+            <div class="related-trades-card">
+              <h2 class="detail-section-title">
+                <i class="bi bi-list-ul"></i>
+                Todas as Operações (<%= @option_trades.count %>)
+              </h2>
+              <div class="related-trades-wrapper">
+                <table class="related-trades-table">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Operação</th>
+                      <th>Qtd</th>
+                      <th>Prêmio</th>
+                      <th>Yield</th>
+                      <th>Total</th>
+                      <th>Notional</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @option_trades.each do |trade| %>
+                      <tr class="<%= trade.close_date.present? ? 'closed-trade' : '' %>">
+                        <td><%= trade.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%y %H:%M') %></td>
+                        <td>
+                          <span class="trade-badge <%= trade.operation_type %>">
+                            <%= trade.operation_type == 'buy' ? 'COMPRA' : 'VENDA' %>
+                          </span>
+                        </td>
+                        <td><%= trade.quantity %></td>
+                        <td>R$ <%= number_to_currency(trade.premium || 0, unit: '', precision: 2, separator: ',') %></td>
+                        <td>
+                          <% if trade.premium_yield.present? %>
+                            <%= number_to_percentage(trade.premium_yield, precision: 2, separator: ',') %>
+                          <% else %>
+                            -
+                          <% end %>
+                        </td>
+                        <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
+                        <td class="trade-notional">R$ <%= number_to_currency(trade.notional || (trade.strike_price * trade.quantity), unit: '', precision: 2, separator: ',') %></td>
+                        <td>
+                          <%= link_to option_trade_path(trade), class: "view-link" do %>
+                            <i class="bi bi-eye"></i>
+                          <% end %>
+                          <%= link_to edit_option_trade_path(trade), class: "edit-link-small" do %>
+                            <i class="bi bi-pencil"></i>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
               </div>
-
-              <div class="quick-trade-field quick-trade-submit">
-                <%= f.submit "Adicionar Operação", class: "quick-trade-btn" %>
+            </div>
+          <% else %>
+            <div class="related-trades-card">
+              <div class="empty-related">
+                <i class="bi bi-inbox"></i>
+                <p>Nenhuma operação encontrada com o código <%= @option_code %></p>
               </div>
             </div>
           <% end %>
-        </div>
-      <% end %>
-      <% if @option_trades.any? %>
-        <div class="related-trades-card">
-          <h2 class="detail-section-title">
-            <i class="bi bi-list-ul"></i>
-            Todas as Operações (<%= @option_trades.count %>)
-          </h2>
-          <div class="related-trades-wrapper">
-            <table class="related-trades-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Operação</th>
-                  <th>Qtd</th>
-                  <th>Strike</th>
-                  <th>Prêmio</th>
-                  <th>Yield</th>
-                  <th>Total</th>
-                  <th>Notional</th>
-                  <th>Vencimento</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @option_trades.each do |trade| %>
-                  <tr class="<%= trade.close_date.present? ? 'closed-trade' : '' %>">
-                    <td><%= trade.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%y %H:%M') %></td>
-                    <td>
-                      <span class="trade-badge <%= trade.operation_type %>">
-                        <%= trade.operation_type == 'buy' ? 'COMPRA' : 'VENDA' %>
-                      </span>
-                    </td>
-                    <td><%= trade.quantity %></td>
-                    <td>R$ <%= number_to_currency(trade.strike_price, unit: '', precision: 2, separator: ',') %></td>
-                    <td>R$ <%= number_to_currency(trade.premium || 0, unit: '', precision: 2, separator: ',') %></td>
-                    <td>
-                      <% if trade.premium_yield.present? %>
-                        <%= number_to_percentage(trade.premium_yield, precision: 2, separator: ',') %>
-                      <% else %>
-                        -
-                      <% end %>
-                    </td>
-                    <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
-                    <td class="trade-notional">R$ <%= number_to_currency(trade.notional || (trade.strike_price * trade.quantity), unit: '', precision: 2, separator: ',') %></td>
-                    <td><%= trade.expiration_date.strftime('%d/%m/%y') %></td>
-                    <td>
-                      <%= link_to option_trade_path(trade), class: "view-link" do %>
-                        <i class="bi bi-eye"></i>
-                      <% end %>
-                      <%= link_to edit_option_trade_path(trade), class: "edit-link-small" do %>
-                        <i class="bi bi-pencil"></i>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      <% else %>
-        <div class="related-trades-card">
-          <div class="empty-related">
-            <i class="bi bi-inbox"></i>
-            <p>Nenhuma operação encontrada com o código <%= @option_code %></p>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
+        <% end %>
+      </div>
     </div>
-  </div>
