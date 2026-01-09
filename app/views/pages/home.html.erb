@@ -399,36 +399,38 @@
               </div>
             </div>
           </div>
-          <div class="trades-table-wrapper">
-            <table class="trades-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Operação</th>
-                  <th>Código</th>
-                  <th>Tipo</th>
-                  <th>Qtd</th>
-                  <th>Strike</th>
-                  <th>Prêmio</th>
-                  <th>Yield</th>
-                  <th>Total</th>
-                  <th>Vencimento</th>
-                  <th>Notional</th>
-                </tr>
-              </thead>
-              <tbody id="option_trades_tbody">
-                <% if @option_trades.present? %>
-                  <% @option_trades.each do |trade| %>
-                    <%= render partial: "option_trades/option_trade_row", locals: { option_trade: trade } %>
+          <%= turbo_frame_tag "trades_list" do %>
+            <div class="trades-table-wrapper">
+              <table class="trades-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Operação</th>
+                    <th>Código</th>
+                    <th>Tipo</th>
+                    <th>Qtd</th>
+                    <th>Strike</th>
+                    <th>Prêmio</th>
+                    <th>Yield</th>
+                    <th>Total</th>
+                    <th>Vencimento</th>
+                    <th>Notional</th>
+                  </tr>
+                </thead>
+                <tbody id="option_trades_tbody">
+                  <% if @option_trades.present? %>
+                    <% @option_trades.each do |trade| %>
+                      <%= render partial: "option_trades/option_trade_row", locals: { option_trade: trade } %>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-          <% if @option_trades.present? %>
-            <div class="pagination-container">
-              <%= paginate @option_trades %>
+                </tbody>
+              </table>
             </div>
+            <% if @option_trades.present? %>
+              <div class="pagination-container">
+                <%= paginate @option_trades %>
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>
