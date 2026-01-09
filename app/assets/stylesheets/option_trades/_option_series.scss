@@ -222,6 +222,19 @@
           color: $secondary-color;
           font-size: 0.9rem;
         }
+
+        &.trade-pnl {
+          font-weight: 700;
+          font-size: 0.9rem;
+
+          .pnl-positive {
+            color: $success-color;
+          }
+
+          .pnl-negative {
+            color: $danger-color;
+          }
+        }
       }
 
       &.closed-trade {

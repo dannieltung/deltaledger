@@ -173,7 +173,6 @@
             </div>
           <% end %>
           <% if @option_trades.any? %>
-            <%= @oldest_open_trade.id %>
             <div class="related-trades-card">
               <h2 class="detail-section-title">
                 <i class="bi bi-list-ul"></i>
@@ -212,7 +211,16 @@
                           <% end %>
                         </td>
                         <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
-                        <td>***HERE***</td>
+                        <td class="trade-pnl">
+                          <% if @oldest_open_trade&.operation_type == trade.operation_type %>
+                            -
+                          <% else %>
+                            <% pnl = (@average_net_premium - trade.net_premium) * trade.quantity %>
+                            <span class="<%= pnl >= 0 ? 'pnl-positive' : 'pnl-negative' %>">
+                              R$ <%= number_to_currency(pnl.abs, unit: '', precision: 2, separator: ',') %>
+                            </span>
+                          <% end %>
+                        </td>
                         <td>
                           <%= link_to option_trade_path(trade), class: "view-link" do %>
                             <i class="bi bi-eye"></i>

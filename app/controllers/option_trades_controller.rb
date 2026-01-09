@@ -119,6 +119,7 @@ class OptionTradesController < ApplicationController
       @net_position = buy_quantity - sell_quantity
 
       @latest_trade = @option_trades.first
+      @oldest_open_trade = @option_trades.open.reorder(created_at: :asc).first
 
       respond_to do |format|
         format.turbo_stream
