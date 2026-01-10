@@ -122,7 +122,7 @@ class OptionTradesController < ApplicationController
     @average_net_premium = result[:average_net_premium]
     @net_position = result[:net_position]
     @latest_trade = result[:latest_trade]
-    @oldest_open_trade = result[:oldest_open_trade]
+    @oldest_trade = result[:oldest_trade]
     @trade_total_sum = result[:trade_total_sum]
   end
 

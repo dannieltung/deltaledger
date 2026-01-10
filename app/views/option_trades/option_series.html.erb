@@ -223,7 +223,7 @@
                         </td>
                         <td class="trade-total">R$ <%= number_to_currency(trade.net_premium * trade.quantity, unit: '', precision: 2, separator: ',') %></td>
                         <td class="trade-pnl">
-                          <% if @oldest_open_trade&.operation_type == trade.operation_type %>
+                          <% if @oldest_trade&.operation_type == trade.operation_type %>
                             -
                           <% else %>
                             <% pnl = (@average_net_premium - trade.net_premium) * trade.quantity %>

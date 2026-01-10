@@ -16,7 +16,7 @@ class OptionSeriesCalculator
       average_net_premium: calculate_average_net_premium,
       net_position: calculate_net_position,
       latest_trade: option_trades.first,
-      oldest_open_trade: option_trades.open.reorder(created_at: :asc).first,
+      oldest_trade: option_trades.reorder(created_at: :asc).first,
       trade_total_sum: calculate_trade_total_sum
     }
   end
@@ -43,13 +43,13 @@ class OptionSeriesCalculator
   end
 
   def calculate_trade_total_sum
-    oldest_open_trade = option_trades.open.reorder(created_at: :asc).first
-    return 0 unless oldest_open_trade
+    oldest_trade = option_trades.reorder(created_at: :asc).first
+    return 0 unless oldest_trade
 
     sell_total = option_trades.where(operation_type: 'sell').sum { |trade| trade.net_premium * trade.quantity }
     buy_total = option_trades.where(operation_type: 'buy').sum { |trade| trade.net_premium * trade.quantity }
 
-    if oldest_open_trade.operation_type == 'sell'
+    if oldest_trade.operation_type == 'sell'
       sell_total - buy_total
     else
       buy_total - sell_total
