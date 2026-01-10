@@ -77,7 +77,7 @@
     </div>
     <%
       # Calcula valores para a calculadora
-      open_sells = @option_trades.where(operation_type: 'sell', close_date: nil)
+      open_sells = @option_trades.where(operation_type: 'sell')
       current_weighted_sum = open_sells.sum { |trade| trade.net_premium * trade.quantity }
       current_quantity_sum = open_sells.sum(:quantity)
     %>
